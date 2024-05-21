@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "CNL Final Chrome Extensions",
+  "description": "Meeting room checker by random qrcode sending",
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "favicon.ico"
+  },
+  "permission": [
+    "offscreen"
+  ],
+  "sandbox": {
+		"pages": ["index.html"]
+	},
+	"content_security_policy": {
+		"sandbox": "sandbox allow-popup allow-modals allow-scripts; script-src 'self' https://apis.google.com https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com"
+	}
+}
