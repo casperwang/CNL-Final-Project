@@ -4,7 +4,7 @@
 CNL-Final-Project\extension> npm run build
 ```
 
-Go to chrome://extentions and enable developer mode.
+Go to [chrome://extentions](chrome://extentions) and enable developer mode.
 
 Click Load Unpacked and select the folder `build`.
 
