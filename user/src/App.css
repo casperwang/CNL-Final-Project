@@ -36,3 +36,40 @@
     transform: rotate(360deg);
   }
 }
+
+/* 在 App.css 或 Login.css */
+.login-button {
+  background-color: #ACE6FB;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 15px; /* 圓角 */
+  font-size: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.273); /* 添加一些陰影 */
+  transition: background-color 0.3s, transform 0.3s; /* 平滑過渡效果 */
+}
+
+.login-button:hover {
+  background-color: #9bc8fb; /* 滑鼠懸浮時的顏色變暗 */
+  transform: scale(1.05); /* 稍微放大 */
+}
+
+.login-button:active {
+  background-color: #8fc3ff; /* 按下時的顏色更暗 */
+}
+
+.login-container {
+  display: flex;
+  justify-content: center; /*水平居中*/
+  align-items: center; /* 垂直居中 */
+  height: 100vh; /* 使容器的高度佔滿整個視窗 */
+}
+
+.login-prompt {
+  color: #666; /* 文字顏色 */
+  margin-bottom: -200px; /* 與按鈕之間的間距 */
+  text-align: center;
+  font-size: 16px; /* 文字大小 */
+  /* 您可以根據需要添加更多樣式 */
+}
