@@ -31,7 +31,7 @@ function Header() {
   return (
     <header>
       <div className="login-bar">
-        <h1 className="website-title">CNL Team 8 Final Project</h1>
+        <h1 className="website-title">CNL Team 8 Final Project - Host Page</h1>
         <div className="login-controls">
           {
             loading

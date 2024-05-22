@@ -1,32 +1,31 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './list.css';
+import { Link } from "react-router-dom";
+import "./list.css";
+
+const meetings = [
+  {
+    name: "meet1",
+    url: "https://example.com",
+    start_time: "2024-05-21T13:00",
+    end_time: "2024-05-21T15:00",
+    type: "onsite",
+    host_id: "0xdefaced",
+    user_ids: ["0xdeadbeef"],
+    id: 1
+  },
+  {
+    name: "meet2",
+    url: "https://google.com",
+    start_time: "2024-05-21T13:00",
+    end_time: "2024-05-21T15:00",
+    type: "online",
+    host_id: "0xdefaced",
+    user_ids: ["0xdeadbeef"],
+    id: 2
+  }
+];
 
 function MeetingList() {
   // TODO: fetch meetings
-  const meetings = [
-    {
-      name: "meet1",
-      start_time: "2024/05/21 13:00",
-      end_time: "2024/05/21 15:00",
-      type: "onsite",
-      host_id: "0xdefaced",
-      user_ids: ["0xdeadbeef"],
-      qrcodes: ["QRCODE"],
-      id: 1 // Unique ID for the meeting
-    },
-    {
-      name: "meet2",
-      start_time: "2024/05/21 13:00",
-      end_time: "2024/05/21 15:00",
-      type: "online",
-      host_id: "0xdefaced",
-      user_ids: ["0xdeadbeef"],
-      qrcodes: ["QRCODE"],
-      id: 2 // Unique ID for the meeting
-    }
-  ];
-
   return (
     <table className="meeting-table">
       <thead>
@@ -59,8 +58,8 @@ function MeetingList() {
             </tr>
           ))
         }
-      </tbody>
-    </table>
+          </tbody>
+        </table>
   );
 }
 
