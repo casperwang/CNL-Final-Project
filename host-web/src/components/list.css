@@ -1,0 +1,55 @@
+.meeting-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 18px;
+  text-align: left;
+}
+
+.meeting-table th, .meeting-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+.meeting-table thead tr {
+  background-color: #f4f4f4;
+}
+
+.meeting-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.meeting-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.meeting-table th {
+  background-color: #333;
+  color: white;
+}
+
+.view-button, .edit-button {
+  padding: 8px 16px;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.view-button {
+  background-color: #4CAF50;
+}
+
+.view-button:hover {
+  background-color: #45a049;
+}
+
+.edit-button {
+  background-color: #007BFF;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}
