@@ -40,7 +40,20 @@ def api_create_meeting(meeting: MeetingData):
 
 @app.get("/get_meetings/")
 def api_get_meetings(host_id: str):
-    pass
+    meetings = get_meetings(host_id=host_id)
+    meeting_list = list()
+    for meeting in meetings:
+        meeting_list.append({
+            "name": meeting.name,
+            "url": meeting.url,
+            "start_time": meeting.start_time,
+            "end_time": meeting.end_time,
+            "type": meeting.type,
+            "host_id": meeting.host_id,
+            "user_ids": meeting.user_ids,
+            "gps": meeting.gps
+        })
+    return meeting_list
 
 @app.get("/get_onsite_qrcode/")
 def api_get_onsite_qrcode(meeting_id: str):
@@ -54,11 +67,7 @@ def api_get_onsite_qrcode(meeting_id: str):
 
 @app.get("/get_user_status/")
 def api_get_user_status(meeting_id: str):
-    meeting = get_meeting(id=meeting_id)
-    if meeting.type == "onsite":
-        pass
-    elif meeting.type == "online":
-        pass
+    return get_status(meeting_id)
 
 @app.post("/join_meeting/")
 def api_join_meeting(user_id: str, meeting_url: str):
