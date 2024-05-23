@@ -1,10 +1,12 @@
 import React from "react";
 import "../App.css";
+import { auth } from "../config/firebase";
 
 const GPSPage = () => {
+    console.log(auth)
   const getLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition, showError);
+      navigator.geolocation.getCurrentPosition(showError);
     } else {
       alert("Geolocation is not supported by this browser.");
     }
@@ -36,7 +38,8 @@ const GPSPage = () => {
 
   return (
     <div className="login-container"> 
-      <button className="login-button" onClick={getLocation}>Get GPS Location</button>
+        <p className="login-prompt">Hello {auth?.currentUser.displayName}, please let me check your location :)</p>
+        <button className="login-button" onClick={getLocation}>Get GPS Location</button>
     </div>
   );
 };

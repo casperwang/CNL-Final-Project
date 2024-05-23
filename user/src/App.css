@@ -42,12 +42,13 @@
   background-color: #ACE6FB;
   color: white;
   border: none;
-  padding: 15px 25px;
+  padding: 13px 20px;
   border-radius: 15px; /* 圓角 */
-  font-size: 25px;
+  font-size: 23px;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.273); /* 添加一些陰影 */
   transition: background-color 0.3s, transform 0.3s; /* 平滑過渡效果 */
+  /* margin-top: 20px; */
 }
 
 .login-button:hover {
@@ -61,15 +62,16 @@
 
 .login-container {
   display: flex;
-  justify-content: center; /*水平居中*/
-  align-items: center; /* 垂直居中 */
-  height: 100vh; /* 使容器的高度佔滿整個視窗 */
+  flex-direction: column; /* 子元素垂直排列 */
+  justify-content: center; /* 子元素在容器中垂直居中 */
+  align-items: center; /* 子元素在容器中水平居中 */
+  height: 100vh; /* 容器高度佔滿整個視窗高度 */
 }
 
 .login-prompt {
-  color: #666; /* 文字顏色 */
-  margin-bottom: -200px; /* 與按鈕之間的間距 */
+  color: #5e5e5e; /* 文字顏色 */
+  /* margin-bottom: 50px; 與按鈕之間的間距 */
   text-align: center;
-  font-size: 16px; /* 文字大小 */
+  font-size: 18px; /* 文字大小 */
   /* 您可以根據需要添加更多樣式 */
 }
