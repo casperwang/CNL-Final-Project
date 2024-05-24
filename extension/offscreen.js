@@ -1,5 +1,5 @@
 // This URL must point to the public site
-const _URL = 'https://www.csie.ntu.edu.tw/~b10902042/signInWithPopup.html';
+const _URL = 'https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html';
 const iframe = document.createElement('iframe');
 iframe.src = _URL;
 document.documentElement.appendChild(iframe);
@@ -13,6 +13,7 @@ function handleChromeMessages(message, sender, sendResponse) {
   }
 
   function handleIframeMessage({data}) {
+    console.log(data);
     try {
       if (data.startsWith('!_{')) {
         // Other parts of the Firebase library send messages using postMessage.

@@ -14,5 +14,8 @@
     "scripting",
     "activeTab",
     "storage"
+  ],
+  "host_permissions": [
+    "splitwise.casperwang.dev"
   ]
 }

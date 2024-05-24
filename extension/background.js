@@ -1,8 +1,20 @@
-chrome.runtime.onMessage.addListener(request => {
-  if (request == "signIn") {
-    console.log("hello");
-    firebaseAuth();
+chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
+  if (message === "signIn") {
+    firebaseAuth()
+    .then((result) => {
+      senderResponse(result);
+    })
+  }else if(message === ""){ // use api example
+    fetch('https://splitwise.casperwang.dev/get_user/?email=qingyun@gmail.com', {
+      method: 'GET',
+    }).then((res) => {
+      return res.json();
+    }).then((res) => {
+      console.log(res);
+      senderResponse(res);
+    })
   }
+  return true;
 })
 
 const OFFSCREEN_DOCUMENT_PATH = '/offscreen.html';
