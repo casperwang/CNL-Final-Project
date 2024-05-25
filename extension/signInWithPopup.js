@@ -12,6 +12,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 
 // This code runs inside of an iframe in the extension's offscreen document.
 // This gives you a reference to the parent frame, i.e. the offscreen document.
@@ -23,7 +24,12 @@ const PARENT_FRAME = document.location.ancestorOrigins[0];
 // https://console.firebase.google.com/project/_/authentication/providers
 const PROVIDER = new GoogleAuthProvider();
 
-async function sendResponse(result) {
+function sendPlain(result) {
+  console.log(result);
+  globalThis.parent.self.postMessage(JSON.stringify(result), PARENT_FRAME);
+}
+
+async function sendSignInRes(result) {
   console.log(auth.currentUser);
   const token = await auth.currentUser.getIdToken(false);
   globalThis.parent.self.postMessage(JSON.stringify({name: result.user.displayName, email: result.user.email, photo: result.user.photoURL, token: token}), PARENT_FRAME);
@@ -31,7 +37,6 @@ async function sendResponse(result) {
 
 globalThis.addEventListener('message', function({data}) {
   console.log("receive some message", data);
-  const auth = getAuth();
   console.log(auth);
   if (data.initAuth) {
     // Opens the Google sign-in page in a popup, inside of an iframe in the
@@ -39,10 +44,12 @@ globalThis.addEventListener('message', function({data}) {
     // To centralize logic, all respones are forwarded to the parent frame,
     // which goes on to forward them to the extension's service worker.
     signInWithPopup(auth, PROVIDER)
-      .then(sendResponse)
-      .catch(sendResponse)
+      .then(sendSignInRes)
+      .catch(sendPlain)
   }
   if (data.logout) {
-    signOut(auth).then(sendResponse).catch(sendResponse)
+    signOut(auth)
+      .then(() => {sendPlain({logout: "success"})})
+      .catch(() => {sendPlain({logout: "fail"})})
   }
 });
