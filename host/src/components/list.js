@@ -58,8 +58,8 @@ function MeetingList() {
             </tr>
           ))
         }
-          </tbody>
-        </table>
+      </tbody>
+    </table>
   );
 }
 

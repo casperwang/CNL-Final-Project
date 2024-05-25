@@ -11,10 +11,10 @@ function App() {
     <>
       <Header />
       <Routes>
-        <Route path="/"  element={<MeetingList />} />
-        <Route path="/meet/:meetingId" exact element={<MeetingView />}/>
+        <Route path="/" element={<MeetingList />} />
+        <Route path="/meet/:meetingId" exact element={<MeetingView />} />
         {/* <Route path="/meet/new"h element={<MeetingView />}/> */}
-        <Route path="/meet/:meetingId/edit" element={<MeetingEdit />}/>
+        <Route path="/meet/:meetingId/edit" element={<MeetingEdit />} />
       </Routes>
     </>
   );

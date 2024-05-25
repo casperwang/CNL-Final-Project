@@ -19,8 +19,8 @@ function Header() {
 
   // console.log(user);
 
-  const login = async() => await signInWithRedirect(auth, provider);
-  const logout = async() => await signOut(auth);
+  const login = async () => await signInWithRedirect(auth, provider);
+  const logout = async () => await signOut(auth);
   const avatarStyle = {
     borderRadius: "50%",
     width: 25,
