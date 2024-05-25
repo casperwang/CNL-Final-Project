@@ -13,9 +13,11 @@
     "offscreen",
     "scripting",
     "activeTab",
-    "storage"
+    "storage",
+    "notifications"
   ],
   "host_permissions": [
-    "splitwise.casperwang.dev"
+    "splitwise.casperwang.dev",
+    "https://api.qrserver.com/v1/create-qr-code/"
   ]
 }

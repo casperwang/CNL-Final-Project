@@ -19,6 +19,20 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
       .then((result) => {
         senderResponse(result);
       })
+  } else if(message === "qrcode") {
+    console.log("show qrcode");
+    chrome.notifications.create("",
+      {
+        type: "basic",
+        title: "Scan it to take a roll call.",
+        message: "",
+        iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html"
+      },
+      function(id) {
+        console.log(id);
+        senderResponse(id);
+      }
+    )
   }
   return true;
 })

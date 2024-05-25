@@ -1,5 +1,6 @@
 document.getElementById("signIn").addEventListener("click", signIn);
 document.getElementById("logOut").addEventListener("click", logOut);
+document.getElementById("qrcode").addEventListener("click", showQRcode);
 
 function signIn() {
   console.log("signIn");
@@ -20,5 +21,12 @@ function logOut() {
     document.getElementById("name").innerText = "CNL final";
     document.getElementById("signIn").style.display = "block";
     document.getElementById("logOut").style.display = "none";
+  })
+}
+
+function showQRcode() {
+  console.log("qrcode");
+  chrome.runtime.sendMessage("qrcode", (response) => {
+    console.log(response)
   })
 }
