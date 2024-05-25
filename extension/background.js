@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
     .then((result) => {
       senderResponse(result);
     })
-  }else if(message === ""){ // use api example
+  } else if(message === ""){ // use api example
     fetch('https://splitwise.casperwang.dev/get_user/?email=qingyun@gmail.com', {
       method: 'GET',
     }).then((res) => {
@@ -13,6 +13,12 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
       console.log(res);
       senderResponse(res);
     })
+  } else if(message === 'logout') {
+    console.log("User logout");
+    firebaseLogOut()
+      .then((result) => {
+        senderResponse(result);
+      })
   }
   return true;
 })
@@ -64,7 +70,19 @@ async function getAuth() {
   return await new Promise(async (resolve, reject) => {
     const auth = await chrome.runtime.sendMessage({
       type: 'firebase-auth',
-      target: 'offscreen'
+      target: 'offscreen',
+      action: 'login'
+    });
+    auth?.name !== 'FirebaseError' ? resolve(auth) : reject(auth);
+  })
+}
+
+async function logOut() {
+  return await new Promise(async (resolve, reject) => {
+    const auth = await chrome.runtime.sendMessage({
+      type: 'firebase-auth',
+      target: 'offscreen',
+      action: 'logout'
     });
     auth?.name !== 'FirebaseError' ? resolve(auth) : reject(auth);
   })
@@ -76,6 +94,29 @@ async function firebaseAuth() {
   const auth = await getAuth()
     .then((auth) => {
       console.log('User Authenticated', auth);
+      return auth;
+    })
+    .catch(err => {
+      if (err.code === 'auth/operation-not-allowed') {
+        console.error('You must enable an OAuth provider in the Firebase' +
+                      ' console in order to use signInWithPopup. This sample' +
+                      ' uses Google by default.');
+      } else {
+        console.error(err);
+        return err;
+      }
+    })
+    .finally(closeOffscreenDocument)
+
+  return auth;
+}
+
+async function firebaseLogOut() {
+  await setupOffscreenDocument(OFFSCREEN_DOCUMENT_PATH);
+
+  const auth = await logOut()
+    .then((auth) => {
+      console.log('User Logout', auth);
       return auth;
     })
     .catch(err => {

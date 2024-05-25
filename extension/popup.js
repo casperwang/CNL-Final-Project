@@ -13,9 +13,12 @@ function signIn() {
 }
 
 function logOut() {
-  console.log("logOut");
-  document.getElementById("input").style.visibility = "hidden";
-  document.getElementById("name").innerText = "CNL final";
-  document.getElementById("signIn").style.display = "block";
-  document.getElementById("logOut").style.display = "none";
+  console.log("logout");
+  chrome.runtime.sendMessage("logout", (response) => {
+    console.log(response)
+    document.getElementById("input").style.visibility = "hidden";
+    document.getElementById("name").innerText = "CNL final";
+    document.getElementById("signIn").style.display = "block";
+    document.getElementById("logOut").style.display = "none";
+  })
 }

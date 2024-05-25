@@ -1,5 +1,5 @@
 // This URL must point to the public site
-const _URL = 'https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html';
+const _URL = 'https://www.csie.ntu.edu.tw/~b10902042/signInWithPopup.html';
 const iframe = document.createElement('iframe');
 iframe.src = _URL;
 document.documentElement.appendChild(iframe);
@@ -34,6 +34,11 @@ function handleChromeMessages(message, sender, sendResponse) {
   // Initialize the authentication flow in the iframed document. You must set the
   // second argument (targetOrigin) of the message in order for it to be successfully
   // delivered.
-  iframe.contentWindow.postMessage({"initAuth": true}, new URL(_URL).origin);
+  if(message.action == 'login') {
+    iframe.contentWindow.postMessage({"initAuth": true}, new URL(_URL).origin);
+  } else if(message.action == 'logout') {
+    console.log("send log out")
+    iframe.contentWindow.postMessage({"logout": true}, new URL(_URL).origin);
+  }
   return true;
 }
