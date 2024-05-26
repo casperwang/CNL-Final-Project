@@ -31,10 +31,12 @@ function MapContainer({ lat, lng }) { // 接收lat和lng作为props
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={{ lat, lng }} // 使用传入的lat和lng动态设置地图中心
-        zoom={20} // 可以调整zoom值以更好地显示位置
+        zoom={19.5} // 可以调整zoom值以更好地显示位置
         options={mapOptions}
       >
-        <Marker position={{ lat, lng }} label={{text: "嗨"}}/>
+        <Marker
+          position={{ lat, lng }}
+        />
       </GoogleMap>
   ) : <></>;
 }
