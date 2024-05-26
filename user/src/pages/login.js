@@ -8,18 +8,24 @@ const Login = () => {
   const navigate = useNavigate();
 
   const login = async () => {
-    const result = await signInWithPopup(auth, provide);
-    console.log(result);
-    // const user = result.user;
-    // console.log("用戶名稱:", user.displayName);
-    // console.log("用戶郵件:", user.email);
-    // console.log("用戶照片URL:", user.photoURL);
-    navigate("/GPS");
+    try {
+      const result = await signInWithPopup(auth, provide);
+      console.log(result);
+      navigate("/GPS"); // 成功登入後導航到 /GPS 頁面
+    } catch (error) {
+      console.error(error);
+      if (error.code === 'auth/popup-closed-by-user') {
+        console.log('Login was cancelled by the user');
+      } else {
+        console.error('Login failed:', error.message);
+      }
+    }
   };
 
   return (
     <div className="login-container"> 
-      <p className="login-prompt">Welcome to the meeting! Please sign in with your Google account!</p>
+      <p className="login-prompt">Welcome to the meeting!</p>
+      <p className="login-prompt"> Please sign in with your Google account! </p>
       <button className="login-button" onClick={login}>Sign in with Google</button>
     </div>
   );
