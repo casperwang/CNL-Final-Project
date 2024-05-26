@@ -4,22 +4,17 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
     .then((result) => {
       senderResponse(result);
     })
-  } else if(message === ""){ // use api example
-    fetch('https://splitwise.casperwang.dev/get_user/?email=qingyun@gmail.com', {
-      method: 'GET',
-    }).then((res) => {
-      return res.json();
-    }).then((res) => {
-      console.log(res);
-      senderResponse(res);
-    })
   } else if(message === 'logout') {
     console.log("User logout");
     firebaseLogOut()
       .then((result) => {
         senderResponse(result);
       })
-  } else if(message === "qrcode") {
+  } else if(message.token){
+    // TODO: call api to join a meeting
+    console.log(message);
+    senderResponse("success");
+  } else if(message === "qrcode") { // show qrcode example
     console.log("show qrcode");
     chrome.notifications.create("",
       {
@@ -33,9 +28,30 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
         senderResponse(id);
       }
     )
+  } else if(message === ""){ // use api example
+    fetch('https://splitwise.casperwang.dev/get_user/?email=qingyun@gmail.com', {
+      method: 'GET',
+    }).then((res) => {
+      return res.json();
+    }).then((res) => {
+      console.log(res);
+      senderResponse(res);
+    })
   }
   return true;
 })
+
+// TODO: periodically call api to get qrcode and send message to popup if this meeting is end
+// example of get current tab url
+// let queryOptions = { active: true, lastFocusedWindow: true };
+// chrome.tabs.query(queryOptions, (tabs) => {
+//   console.log(tabs);
+//   if(tabs.length === 0 || tabs[0].url !== url){
+//     console.log("go to correct url!");
+//   }else{
+//     console.log("correct")
+//   }
+// })
 
 const OFFSCREEN_DOCUMENT_PATH = '/offscreen.html';
 

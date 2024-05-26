@@ -14,7 +14,8 @@
     "scripting",
     "activeTab",
     "storage",
-    "notifications"
+    "notifications",
+    "tabs"
   ],
   "host_permissions": [
     "splitwise.casperwang.dev",
