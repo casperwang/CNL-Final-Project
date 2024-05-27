@@ -46,9 +46,9 @@ const GPSPage = () => {
     };
 
     return (
-        <div className="login-container"> 
+        <div className="GPS-container"> 
             <p className="login-prompt">Hello {auth?.currentUser?.displayName || "User"}, please let me check your location :)</p>
-            <button className="login-button" onClick={getLocation}>Get GPS Location</button>
+            <button className="GPS-button" onClick={getLocation}>Get GPS Location</button>
             {location.latitude && location.longitude && (
                 <>
                     <p className="login-prompt">You are here!</p>

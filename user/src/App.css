@@ -10,7 +10,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('./IMG_9426.jpg'); /* 替换为您的背景图片URL */
+  background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('./picture/background.jpg');
   background-size: cover; /* 背景图片覆盖整个页面 */
   background-position: center; /* 背景图片居中显示 */
   background-attachment: fixed; /* 背景图片固定，不随滚动条滚动 */
@@ -46,7 +46,7 @@ body {
   }
 }
 
-/* 在 App.css 或 Login.css */
+/* Login的部分 */
 /* .login-button {
   background-image: url('./image.png');
   background-size: 100%; 
@@ -99,6 +99,36 @@ body {
   /* 您可以根據需要添加更多樣式 */
 }
 
+/* GPS */
+.GPS-container {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 80vh;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  margin-left: 3vh;
+  margin-right: 3vh;
+  opacity: 0.9;
+}
+
+.GPS-button {
+  background-color: #ACE6FB;
+  color: white;
+  border: none;
+  padding: 11px 19px;
+  border-radius: 15px; 
+  font-size: 23px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.273); /*添加一些陰影*/
+  transition: background-color 0.3s, transform 0.3s; /*平滑過渡效果*/
+  margin-top: 20px;
+}
+
+/* Success */
 .success-container {
   display: flex;
   flex-direction: column;
