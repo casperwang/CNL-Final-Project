@@ -28,6 +28,8 @@ function Header() {
     display: "block",
   };
 
+  const className = "button button-green";
+
   return (
     <header>
       <div className="login-bar">
@@ -40,8 +42,8 @@ function Header() {
           }
           {
             !loading && !user
-              ? <button onClick={login}>Login</button>
-              : <button onClick={logout}>Logout</button>
+              ? <button onClick={login} className={className}>Login</button>
+              : <button onClick={logout} className={className}>Logout</button>
           }
         </div>
       </div>

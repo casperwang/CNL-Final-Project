@@ -21,16 +21,7 @@ header {
     align-items: center;
 }
 
-.login-controls button {
+.login-controls > button {
     margin-left: 10px;
     padding: 5px 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.login-controls button:hover {
-    background-color: #45a049;
 }

@@ -98,14 +98,14 @@ function MeetingEdit() {
   }
 
   return (
-    <div className="meeting-edit">
+    <div className="meeting-container">
       <Link to={`/`}>
-        <button className="back-button">
+        <button className="button button-red">
           Back to Meetings List
         </button>
       </Link>
       <Link to={`/meet/${meetingId}`}>
-        <button className="view-button">
+        <button className="button button-green">
           View
         </button>
       </Link>
@@ -199,7 +199,7 @@ function MeetingEdit() {
             onChange={handleChange}
           />
         </div>
-        <button type="submit" className="submit-button">Save Changes</button>
+        <button type="submit" className="button button-green">Save Changes</button>
       </form>
     </div>
   );

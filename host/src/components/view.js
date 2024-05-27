@@ -73,14 +73,14 @@ function MeetingDetails() {
   }
 
   return (
-    <div className="meeting-details">
+    <div className="meeting-container">
       <Link to={`/`}>
-        <button className="back-button">
+        <button className="button button-red">
           Back to Meetings List
         </button>
       </Link>
       <Link to={`/meet/${meetingId}/edit`}>
-        <button className="edit-button">
+        <button className="button button-blue">
           Edit
         </button>
       </Link>

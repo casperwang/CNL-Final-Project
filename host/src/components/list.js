@@ -49,10 +49,10 @@ function MeetingList() {
               {/* <td>{meet.host_id}</td> */}
               <td>
                 <Link to={`/meet/${meet.id}`}>
-                  <button className="view-button">View</button>
+                  <button className="button button-green">View</button>
                 </Link>
                 <Link to={`/meet/${meet.id}/edit`}>
-                  <button className="edit-button">Edit</button>
+                  <button className="button button-blue">Edit</button>
                 </Link>
               </td>
             </tr>
