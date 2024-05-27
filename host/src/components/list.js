@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 import "./list.css";
 
 const meetings = [
@@ -27,6 +28,12 @@ const meetings = [
 function MeetingList() {
   // TODO: fetch meetings
   return (
+    <>
+    <Link to={`/meet/new`}>
+      <button className="button button-green" style={{ marginTop: 20, marginLeft: 10 }}>
+        New meeting
+      </button>
+    </Link>
     <table className="meeting-table">
       <thead>
         <tr>
@@ -60,6 +67,7 @@ function MeetingList() {
         }
       </tbody>
     </table>
+    </>
   );
 }
 
