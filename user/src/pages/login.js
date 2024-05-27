@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth, provide } from "../config/firebase";
 import { signInWithPopup } from "firebase/auth";
 import "../App.css";
-import login_button from './image.png'
+import login_button from '../picture/login_button.png'
 
 const Login = () => {
   const navigate = useNavigate();
