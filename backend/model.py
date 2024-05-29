@@ -7,8 +7,13 @@ from bson.binary import Binary, UUID_SUBTYPE
 import uuid
 
 import time
+import firebase_admin
+from firebase_admin import credentials, auth
 
 from utils import *
+
+cred = credentials.Certificate("./cnl-final-chrome-extensions-firebase-adminsdk-x7shf-98e44d5ee6.json")
+firebase_admin.initialize_app(cred)
 
 def get_client():
     uri = "mongodb://localhost:27017"
@@ -21,6 +26,11 @@ def get_db(client=None):
 
 def get_prefix() -> str:
     return "CNL.casperwang.dev"
+
+def to_uid(google_id):
+    decoded_token = auth.verify_id_token(user_id)
+    uid = decoded_token['uid']
+    return uid
 
 class QRCode:
     def __init__(self, _id, meeting_id, start_time, end_time, user_id=None, used=False):
@@ -60,7 +70,7 @@ def get_qrcode(qrcode_id: str) -> QRCode:
 def get_qrcodes(user_id: str) -> List[QRCode]:
     db = get_db()
     qrcodes = db['qrcodes']
-    user_qrcodes = qrcodes.find({"user_id": user_id})
+    user_qrcodes = qrcodes.find({"user_id": to_uid(user_id)})
     if not user_qrcodes:
         raise ValueError("QRCode not found")
     return [QRCode.from_dict(qrcode) for qrcode in user_qrcodes]
@@ -85,7 +95,7 @@ def create_online_qrcodes(meeting_id: str, start_time: int, end_time: int, user_
             meeting_id=meeting_id,
             start_time=time_point,
             end_time=end_time,
-            user_id=user_id
+            user_id=to_uid(user_id)
         ))
         qrcodes.append(qrcode_id)
     return qrcodes
@@ -155,9 +165,9 @@ def get_meetings(host_id: str):
 def add_user(meeting_id: str, user_id: str):
     meeting = get_meeting(id=meeting_id)
     if user_id not in meeting.user_ids:
-        meeting.user_ids.append(user_id)
+        meeting.user_ids.append(to_uid(user_id))
         if meeting.meeting_type == "online":
-            new_qrcodes = create_online_qrcodes(meeting._id, meeting.start_time, meeting.end_time, user_id)
+            new_qrcodes = create_online_qrcodes(meeting._id, meeting.start_time, meeting.end_time, to_uid(user_id))
             meeting.qrcodes.extend(new_qrcodes)
         db = get_db()
         meetings = db['meetings']
@@ -183,7 +193,7 @@ class Sign:
 def get_signs(user_id: str):
     db = get_db()
     signs = db['signs']
-    user_signs = signs.find({"user_id": user_id})
+    user_signs = signs.find({"user_id": to_uid(user_id)})
     return [Sign.from_dict(sign) for sign in user_signs]
 
 def create_sign(qrcode_id: str, meeting_id: str, user_id: str) -> bool:
@@ -191,7 +201,7 @@ def create_sign(qrcode_id: str, meeting_id: str, user_id: str) -> bool:
     signs = db['signs']
     qrcodes = db['qrcodes']
 
-    checker = signs.find_one({"qrcode_id": qrcode_id, "meeting_id": meeting_id, "user_id": user_id})
+    checker = signs.find_one({"qrcode_id": qrcode_id, "meeting_id": meeting_id, "user_id": to_uid(user_id)})
     if checker != None:
         return False
 
@@ -200,7 +210,7 @@ def create_sign(qrcode_id: str, meeting_id: str, user_id: str) -> bool:
     if cur_time < target_qrcode.start_time or target_qrcode.end_time < cur_time:
         return False
 
-    sign = Sign(qrcode_id, meeting_id, user_id)
+    sign = Sign(qrcode_id, meeting_id, to_uid(user_id))
     signs.insert_one(sign.__dict__)
     qrcodes.update_one(
             {"_id": qrcode_id},
