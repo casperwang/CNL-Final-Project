@@ -18,7 +18,7 @@
     "tabs"
   ],
   "host_permissions": [
-    "splitwise.casperwang.dev",
+    "https://cnl.casperwang.dev/",
     "https://api.qrserver.com/v1/create-qr-code/"
   ]
 }

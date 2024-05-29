@@ -1,4 +1,5 @@
 let count = 0;
+let backend = "https://cnl.casperwang.dev/";
 chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
   if (message === "signIn") {
     firebaseAuth()
@@ -14,28 +15,70 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
   } else if(message.type === "join"){
     // TODO: call api to join a meeting
     console.log(message);
-    senderResponse("success");
+    apiURL = backend + "join_meeting/?user_id=" + message.token + "&meeting_url=" + message.url;
+    fetch(apiURL, {
+      method: 'POST',
+      // mode: "no-cors"
+    }).then((res) => {
+      if(res.ok)
+        return res.json();
+      throw new Error('Something went wrong.');
+    }).then((res) => {
+      console.log(res);
+      senderResponse(res);
+    }).catch((res) => {
+      console.log(res);
+      senderResponse(res);
+    })
   } else if(message.type === "qrcode") {
     // TODO: call api to get qrcode
     let queryOptions = { active: true, lastFocusedWindow: true };
     chrome.tabs.query(queryOptions, (tabs) => {
       console.log(tabs);
-      if(tabs.length === 0 || tabs[0].url !== message.url){
+      console.log(message.url);
+      if(tabs.length === 0 || (tabs[0].url !== message.url && tabs[0].url !== message.url + "/")){
         console.log("go to correct url!");
       }else{
         console.log("correct");
-        chrome.notifications.create("",
-          {
-            type: "basic",
-            title: "Scan it to take a roll call.",
-            message: "",
-            iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html"
-          },
-          function(id) {
-            console.log(id);
-            senderResponse(id);
-          }
-        );
+        let apiURL = backend + "get_online_qrcode/?user_id=" + message.token + "&meeting_url=" + message.url;
+        fetch(apiURL, {
+          method: 'GET',
+          // mode: "no-cors"
+        }).then((res) => {
+          if(res.ok)
+            return res.json();
+          throw new Error('Something went wrong.');
+        }).then((res) => {
+          console.log(res);
+          // chrome.notifications.create("",
+          //   {
+          //     type: "basic",
+          //     title: "Scan it to take a roll call.",
+          //     message: "",
+          //     iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html"
+          //   },
+          //   function(id) {
+          //     console.log(id);
+          //     senderResponse(id);
+          //   }
+          // );
+          senderResponse(res);
+        }).catch((res) => {
+          console.log(res);
+          senderResponse("stop");
+        });
+        // chrome.notifications.create("",
+        //   {
+        //     type: "basic",
+        //     title: "Scan it to take a roll call.",
+        //     message: "",
+        //     iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html"
+        //   },
+        //   function(id) {
+        //     console.log(id);
+        //     senderResponse(id);
+        //   }
+        // );
       }
     })
     count++;
