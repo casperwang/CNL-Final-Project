@@ -1,3 +1,4 @@
+let count = 0;
 chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
   if (message === "signIn") {
     firebaseAuth()
@@ -10,24 +11,38 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
       .then((result) => {
         senderResponse(result);
       })
-  } else if(message.token){
+  } else if(message.type === "join"){
     // TODO: call api to join a meeting
     console.log(message);
     senderResponse("success");
-  } else if(message === "qrcode") { // show qrcode example
-    console.log("show qrcode");
-    chrome.notifications.create("",
-      {
-        type: "basic",
-        title: "Scan it to take a roll call.",
-        message: "",
-        iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html"
-      },
-      function(id) {
-        console.log(id);
-        senderResponse(id);
+  } else if(message.type === "qrcode") {
+    // TODO: call api to get qrcode
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    chrome.tabs.query(queryOptions, (tabs) => {
+      console.log(tabs);
+      if(tabs.length === 0 || tabs[0].url !== message.url){
+        console.log("go to correct url!");
+      }else{
+        console.log("correct");
+        chrome.notifications.create("",
+          {
+            type: "basic",
+            title: "Scan it to take a roll call.",
+            message: "",
+            iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html"
+          },
+          function(id) {
+            console.log(id);
+            senderResponse(id);
+          }
+        );
       }
-    )
+    })
+    count++;
+    if(count > 5)
+      senderResponse("stop");
+    else
+      senderResponse("success");
   } else if(message === ""){ // use api example
     fetch('https://splitwise.casperwang.dev/get_user/?email=qingyun@gmail.com', {
       method: 'GET',
@@ -40,18 +55,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
   }
   return true;
 })
-
-// TODO: periodically call api to get qrcode and send message to popup if this meeting is end
-// example of get current tab url
-// let queryOptions = { active: true, lastFocusedWindow: true };
-// chrome.tabs.query(queryOptions, (tabs) => {
-//   console.log(tabs);
-//   if(tabs.length === 0 || tabs[0].url !== url){
-//     console.log("go to correct url!");
-//   }else{
-//     console.log("correct")
-//   }
-// })
 
 const OFFSCREEN_DOCUMENT_PATH = '/offscreen.html';
 

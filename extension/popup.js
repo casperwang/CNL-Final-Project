@@ -43,34 +43,38 @@ function logOut() {
     document.getElementById("name").innerText = "CNL final";
     document.getElementById("signIn").style.display = "block";
     document.getElementById("logOut").style.display = "none";
+    document.getElementById("meetingInfo").style.visibility = "hidden";
     localStorage.removeItem("NAME");
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("MEETING");
   })
 }
 
-function showQRcode() {
+function showQRcode(token, url) {
   console.log("qrcode");
-  chrome.runtime.sendMessage("qrcode", (response) => {
-    console.log(response)
-  })
+  let ID = window.setInterval(() => {
+    chrome.runtime.sendMessage({type: "qrcode", token: token, url: url}, (response) => {
+      console.log(response);
+      if(response === "stop"){
+        window.clearInterval(ID);
+      }
+    });
+  }, 5000);
 }
 
 function joinMeeting(e) {
   console.log("join meeting");
   if(e.key === "Enter"){
-    console.log(e.target.value);
+    let url = e.target.value;
+    console.log(url);
     let token = localStorage.getItem("TOKEN");
-    chrome.runtime.sendMessage({token: token, url: e.target.value}, (response) => {
-      console.log(response)
+    chrome.runtime.sendMessage({type: "join", token: token, url: url}, (response) => {
+      console.log(response);
       document.getElementById("input").style.visibility = "hidden";
       document.getElementById("meetingInfo").style.visibility = "visible";
-      document.getElementById("meetingURL").innerText = e.target.value;
-      localStorage.setItem("MEETING", e.target.value);
+      document.getElementById("meetingURL").innerText = url;
+      localStorage.setItem("MEETING", url);
+      showQRcode(token, url);
     })
   }
 }
-
-chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
-  // TODO: when meeting is end background will send message -> remove item from localStorage
-})
