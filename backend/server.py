@@ -6,6 +6,9 @@ from pydantic import BaseModel
 from typing import List, Dict, Tuple, Optional
 import uuid
 
+import firebase_admin
+from firebase_admin import credentials, auth
+
 from model import *
 
 app = FastAPI()
@@ -92,7 +95,7 @@ def api_join_meeting(user_id: str, meeting_url: str):
 @app.get("/get_online_qrcode/")
 def api_get_online_qrcode(user_id: str, meeting_url: str):
     meeting = get_meeting(url=meeting_url)
-    if user_id not in meeting.user_ids:
+    if to_uid(user_id) not in meeting.user_ids:
         raise HTTPException(status_code=404, detail="User not found in the meeting")
 
     qrcodes = get_qrcodes(user_id)
