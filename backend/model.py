@@ -27,7 +27,7 @@ def get_db(client=None):
 def get_prefix() -> str:
     return "CNL.casperwang.dev"
 
-def to_uid(google_id):
+def to_uid(user_id):
     decoded_token = auth.verify_id_token(user_id)
     uid = decoded_token['uid']
     return uid
@@ -164,10 +164,11 @@ def get_meetings(host_id: str):
 # didn't test
 def add_user(meeting_id: str, user_id: str):
     meeting = get_meeting(id=meeting_id)
-    if user_id not in meeting.user_ids:
-        meeting.user_ids.append(to_uid(user_id))
+    uid = to_uid(user_id)
+    if uid not in meeting.user_ids:
+        meeting.user_ids.append(uid)
         if meeting.meeting_type == "online":
-            new_qrcodes = create_online_qrcodes(meeting._id, meeting.start_time, meeting.end_time, to_uid(user_id))
+            new_qrcodes = create_online_qrcodes(meeting._id, meeting.start_time, meeting.end_time, uid)
             meeting.qrcodes.extend(new_qrcodes)
         db = get_db()
         meetings = db['meetings']
