@@ -7,6 +7,14 @@
   pointer-events: none;
 }
 
+.logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px; /* 根据需要调整logo的大小 */
+  height: auto; /* 保持logo的宽高比 */
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -21,6 +29,10 @@ body {
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
+/* 在 CSS 文件顶部 */
+@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Poetsen+One&display=swap');
 
 .App-header {
   background-color: #282c34;
@@ -78,6 +90,7 @@ body {
 }
 
 .login-container {
+  font-family: "Lora", serif;
   background-color: white;
   display: flex;
   flex-direction: column; /* 子元素垂直排列 */
@@ -101,6 +114,7 @@ body {
 
 /* GPS */
 .GPS-container {
+  font-family: "Lora", serif;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -126,24 +140,32 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.273); /*添加一些陰影*/
   transition: background-color 0.3s, transform 0.3s; /*平滑過渡效果*/
   margin-top: 20px;
+  font-family: "Poetsen One", sans-serif;
 }
 
 /* Success */
 .success-container {
+  background-color: azure;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh; 
+  height: 80vh;
+  margin-top: 10vh;
+  margin-bottom: 10vh; 
   text-align: center;
+  opacity: 0.8;
 }
 
 .success-container h1 {
-  color: #57d2ff; 
+  color: #000000; 
   margin-bottom: 0;
+  font-family: "Poetsen One", sans-serif;
 }
 
 .success-container p {
   color: #0077ff;
-  font-size: 25px;
+  margin-bottom: 0;
+  font-size: 23px;
+  font-family: "Poetsen One", sans-serif;
 }
