@@ -43,7 +43,7 @@ def api_get_meeting(id: str, url: str):
     meeting = None
     if id:
         meeting = get_meeting(id=id)
-    else:
+    elif url:
         meeting = get_meeting(url=url)
     return meeting
 
