@@ -95,7 +95,7 @@ def create_online_qrcodes(meeting_id: str, start_time: int, end_time: int, user_
             meeting_id=meeting_id,
             start_time=time_point,
             end_time=end_time,
-            user_id=to_uid(user_id)
+            user_id=user_id
         ))
         qrcodes.append(qrcode_id)
     return qrcodes
