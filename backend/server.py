@@ -48,7 +48,7 @@ def api_get_meetings(host_id: str):
             "url": meeting.url,
             "start_time": meeting.start_time,
             "end_time": meeting.end_time,
-            "type": meeting.type,
+            "type": meeting.meeting_type,
             "host_id": meeting.host_id,
             "user_ids": meeting.user_ids,
             "gps": meeting.gps
