@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
+import { toast } from "react-toastify";
+
 import { auth } from "../auth";
 import { apiPrefix } from "../config";
 
@@ -15,7 +17,7 @@ function MeetingCreate() {
     end_time: '',
     type: 'onsite',
     // user_ids: '',
-    // gps: ''
+    gps: ''
   });
   const [user, loading, error] = useAuthState(auth);
   const navigate = useNavigate();
@@ -30,19 +32,20 @@ function MeetingCreate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO gps
-    const data = {
-      ...formData,
-      host_id: user?.accessToken,
-      user_ids: [],
-      gps: null,
-    };
-
-    console.log({ data });
 
     try {
+      // TODO gps
+      const [longitude, latitude] = formData.gps.split(' ');
+      const data = {
+        ...formData,
+        host_id: user?.accessToken,
+        user_ids: [],
+        gps: null,
+        // gps: { longitude, latitude },
+      };
+      console.log({ data });
+
       const response = await fetch(`${apiPrefix}/create_meeting/`, {
-        // mode: 'no-cors',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -50,12 +53,36 @@ function MeetingCreate() {
         body: JSON.stringify(data),
       });
       if (!response.ok) {
+        console.log(await response.text());
         throw new Error('Network response was not ok');
       }
+      toast.success("request sent");
       const { meeting_id } = await response.json();
       navigate(`/meet/${meeting_id}`);
     } catch (error) {
+      toast.error("request failed");
       console.error("Error fetching meetings:", error);
+    }
+  };
+
+  const getGPS = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setFormData({
+            ...formData,
+            gps: `${longitude} ${latitude}`
+          });
+        },
+        (error) => {
+          // throw error;
+          console.log(error);
+          alert("Error when getting GPS location.");
+        });
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+      alert("Geolocation is not supported by this browser.");
     }
   };
 
@@ -125,26 +152,30 @@ function MeetingCreate() {
             <option value="online">online</option>
           </select>
         </div>
+        {/* <div className="form-group"> */}
+        {/*   <label htmlFor="user_ids">User IDs (comma separated)</label> */}
+        {/*   <input */}
+        {/*     type="text" */}
+        {/*     id="user_ids" */}
+        {/*     name="user_ids" */}
+        {/*     value={formData.user_ids} */}
+        {/*     onChange={handleChange} */}
+        {/*   /> */}
+        {/* </div> */}
         <div className="form-group">
-          <label htmlFor="user_ids">User IDs (comma separated)</label>
+          <label htmlFor="gps">GPS</label>
           <input
             type="text"
-            id="user_ids"
-            name="user_ids"
-            value={formData.user_ids}
+            id="gps"
+            name="gps"
+            value={formData.gps}
             onChange={handleChange}
+            required
           />
         </div>
-        {/* <div className="form-group"> */}
-          {/* <label htmlFor="gps">GPS</label> */}
-          {/* <input */}
-          {/*   type="text" */}
-          {/*   id="gps" */}
-          {/*   name="gps" */}
-          {/*   value={formData.gps} */}
-          {/*   onChange={handleChange} */}
-          {/* /> */}
-        {/* </div> */}
+        <button type="button" className="button button-blue" onClick={getGPS}>
+          Get GPS Location
+        </button>
         <button type="submit" className="button button-green">Create new meeting</button>
       </form>
     </div>

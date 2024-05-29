@@ -7,10 +7,14 @@ import MeetingCreate from "./components/create";
 
 import { Routes, Route } from "react-router-dom";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <>
       <Header />
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<MeetingList />} />
         <Route path="/meet/:meetingId" exact element={<MeetingView />} />
