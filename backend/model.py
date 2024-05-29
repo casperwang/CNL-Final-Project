@@ -229,6 +229,6 @@ def get_status(meeting_id: str):
 
     return res
     
-def vefiry_gps(meeting_id, gps_data) -> bool:
+def verify_gps(meeting_id, gps_data) -> bool:
     meeting = get_meeting(id=meeting_id)
     return cal_dis_gps(meeting.gps, gps_data) <= 50

@@ -1,12 +1,12 @@
 import random
-from datetime import timedelta
 from numpy import sin, cos, arccos, pi, round
 
 def random_time_points(start_time, end_time, num_points):
-    delta = int(end_time) - int(start_time)
-    delta_seconds = int(delta.total_seconds())
-    random_seconds = sorted(random.randint(0, delta_seconds // 60 - 1) * 60 for _ in range(num_points))
-    time_points = [start_time + timedelta(seconds=sec) for sec in random_seconds]
+    start_time = int(start_time)
+    end_time = int(end_time)
+    delta = end_time - start_time
+    random_seconds = sorted(random.randint(0, delta // 60 - 1) * 60 for _ in range(num_points))
+    time_points = [start_time + sec for sec in random_seconds]
     return time_points
 
 # calculate gps distance
