@@ -43,6 +43,8 @@ def api_get_meetings(host_id: str):
     meetings = get_meetings(host_id=host_id)
     meeting_list = list()
     for meeting in meetings:
+        meeting_list.append(meeting.__dict__)
+        """
         meeting_list.append({
             "name": meeting.name,
             "url": meeting.url,
@@ -53,6 +55,7 @@ def api_get_meetings(host_id: str):
             "user_ids": meeting.user_ids,
             "gps": meeting.gps
         })
+        """
     return meeting_list
 
 @app.get("/get_onsite_qrcode/")
