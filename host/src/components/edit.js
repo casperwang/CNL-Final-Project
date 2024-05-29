@@ -42,6 +42,8 @@ function MeetingEdit() {
   });
   const navigate = useNavigate();
 
+  return <p>WIP</p>;
+
   useEffect(() => {
     // Fetch meeting data using meetingId
     // This is a placeholder; replace with actual data fetching logic

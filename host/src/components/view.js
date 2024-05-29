@@ -1,66 +1,59 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { TailSpin } from "react-loading-icons";
 import { QRCodeSVG } from "qrcode.react";
+
+import { auth } from "../auth";
+import { apiPrefix } from "../config";
 
 import UserStatus from "./view-user-status";
 
 import "./view.css";
-import "./view-user-status.css";
-
-const meetings = [
-  {
-    name: "meet1",
-    url: "https://example.com",
-    start_time: "2024-05-21T13:00",
-    end_time: "2024-05-21T15:00",
-    type: "onsite",
-    host_id: "0xdefaced",
-    user_ids: ["0xdeadbeef"],
-    id: 1
-  },
-  {
-    name: "meet2",
-    url: "https://google.com",
-    start_time: "2024-05-21T13:00",
-    end_time: "2024-05-21T15:00",
-    type: "online",
-    host_id: "0xdefaced",
-    user_ids: ["0xdeadbeef"],
-    id: 2
-  }
-];
-
-const userStatuses = [
-  [
-    [1, 0, 0, 1, 1],
-    [1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0],
-  ],
-  []
-];
 
 function MeetingDetails() {
   const { meetingId } = useParams();
+
+  const [user, loading, error] = useAuthState(auth);
   const [meeting, setMeeting] = useState(null);
-  const [userStatus, setUserStatus] = useState(null);
+  const [QRcodeURL, setQRcodeURL] = useState(null);
+  // const [userStatus, setUserStatus] = useState(null);
 
   useEffect(() => {
     const fetchMeeting = async () => {
-      // const res = await fetch("some-url");
-      // res.json();
-      // console.log(res);
-      setMeeting(meetings[meetingId - 1]);
+      if (!user) return;
+      const host_id = user?.accessToken;
+      try {
+        // TODO injection problem?
+        const response = await fetch(`${apiPrefix}/get_meeting/?meeting_id=${meetingId}&host_id=${host_id}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const fetchedMeeting = await response.json();
+        setMeeting(fetchedMeeting);
+        // TODO why type is wrong?
+        if (fetchMeeting.type === "onsite") {
+          const response = await fetch(`${apiPrefix}/get_onsite_qrcode/?meeting_id=${meetingId}`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const fetchedQRcodeURL = await response.json();
+          setQRcodeURL(fetchedQRcodeURL);
+        }
+      } catch (error) {
+        console.error("Error fetching meetings:", error);
+      }
     };
-    fetchMeeting();
-  }, [meetingId]);
 
-  useEffect(() => {
-    const fetchUserStatus = async () => {
-      setUserStatus(userStatuses[meetingId - 1]);
-    };
-    fetchUserStatus();
-  }, [meetingId, meeting]);
+    fetchMeeting();
+  }, [user, meetingId]);
+
+  // useEffect(() => {
+  //   const fetchUserStatus = async () => {
+  //     setUserStatus(userStatuses[meetingId - 1]);
+  //   };
+  //   fetchUserStatus();
+  // }, [meetingId, meeting]);
 
   if (!meeting) { // loading
     return (
@@ -86,6 +79,7 @@ function MeetingDetails() {
       </Link>
       <h1>{meeting.name}</h1>
       <center>
+        URL: {QRcodeURL}
         <QRCodeSVG value="https://example.com" />
       </center>
       <table>
@@ -106,10 +100,10 @@ function MeetingDetails() {
             <th>End time</th>
             <td>{meeting.end_time}</td>
           </tr>
-          <tr>
-            <th>Host ID</th>
-            <td>{meeting.host_id}</td>
-          </tr>
+          {/* <tr> */}
+          {/*   <th>Host ID</th> */}
+          {/*   <td>{meeting.host_id}</td> */}
+          {/* </tr> */}
           <tr>
             <th>User IDs</th>
             <td>{meeting.user_ids.join(', ')}</td>
@@ -121,7 +115,7 @@ function MeetingDetails() {
         </tbody>
       </table>
 
-      <UserStatus userStatus={userStatus} />
+      {/* <UserStatus userStatus={userStatus} /> */}
     </div>
   );
 }

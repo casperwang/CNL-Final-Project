@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { TailSpin } from "react-loading-icons";
 
 import { auth } from "../auth";
 import { apiPrefix } from "../config";
@@ -15,7 +14,7 @@ function MeetingCreate() {
     start_time: '',
     end_time: '',
     type: '',
-    user_ids: '',
+    // user_ids: '',
     // gps: ''
   });
   const [user, loading, error] = useAuthState(auth);
@@ -31,6 +30,7 @@ function MeetingCreate() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // TODO gps
     const data = {
       ...formData,
       host_id: user?.accessToken,
@@ -40,17 +40,22 @@ function MeetingCreate() {
 
     console.log({ data });
 
-    const response = await fetch(`${apiPrefix}/create_meeting/`, {
-      // mode: 'no-cors',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    });
-    if (response.ok) {
+    try {
+      const response = await fetch(`${apiPrefix}/create_meeting/`, {
+        // mode: 'no-cors',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
       const { meeting_id } = await response.json();
-      navigate(`/meetings/${meeting_id}`);
+      navigate(`/meet/${meeting_id}`);
+    } catch (error) {
+      console.error("Error fetching meetings:", error);
     }
   };
 
