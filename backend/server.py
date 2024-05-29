@@ -60,7 +60,7 @@ def api_get_onsite_qrcode(meeting_id: str):
     meeting = get_meeting(id=meeting_id)
     if not meeting:
         raise HTTPException(status_code=404, detail="Meeting not found")
-    if meeting.type != "onsite":
+    if meeting.meeting_type != "onsite":
         raise HTTPException(status_code=404, detail="Meeting type should be 'onsite'")
     qrcode = get_qrcode(meeting.qrcodes[0])
     return qrcode.url
