@@ -96,8 +96,9 @@ def api_join_meeting(user_id: str, meeting_url: str):
 def api_get_online_qrcode(user_id: str, meeting_url: str):
     meeting = get_meeting(url=meeting_url)
     if to_uid(user_id) not in meeting.user_ids:
-        print(to_uid(user_id), meeting.user_ids)
-        raise HTTPException(status_code=404, detail="User not found in the meeting")
+        #print(to_uid(user_id), meeting.user_ids)
+        #raise HTTPException(status_code=404, detail="User not found in the meeting")
+        raise HTTPException(status_code=404, detail=f"{to_uid(user_id)}")
 
     qrcodes = get_qrcodes(user_id)
     closest_qrcode = None
