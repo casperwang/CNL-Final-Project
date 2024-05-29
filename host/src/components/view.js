@@ -31,14 +31,14 @@ function MeetingDetails() {
         }
         const fetchedMeeting = await response.json();
         setMeeting(fetchedMeeting);
-        // TODO why type is wrong?
-        if (fetchMeeting.type === "onsite") {
+        if (fetchedMeeting.type === "onsite") {
           const response = await fetch(`${apiPrefix}/get_onsite_qrcode/?meeting_id=${meetingId}`);
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
           const fetchedQRcodeURL = await response.json();
           setQRcodeURL(fetchedQRcodeURL);
+          console.log({ fetchedQRcodeURL });
         }
       } catch (error) {
         console.error("Error fetching meetings:", error);
@@ -78,10 +78,14 @@ function MeetingDetails() {
         </button>
       </Link>
       <h1>{meeting.name}</h1>
-      <center>
-        URL: {QRcodeURL}
-        <QRCodeSVG value="https://example.com" />
-      </center>
+      {
+        QRcodeURL &&
+          <center>
+            <Link to={QRcodeURL}>
+              <QRCodeSVG value={QRcodeURL} />
+            </Link>
+          </center>
+      }
       <table>
         <tbody>
           <tr>

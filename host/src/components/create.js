@@ -13,7 +13,7 @@ function MeetingCreate() {
     url: '',
     start_time: '',
     end_time: '',
-    type: '',
+    type: 'onsite',
     // user_ids: '',
     // gps: ''
   });
