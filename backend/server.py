@@ -21,7 +21,7 @@ class MeetingData(BaseModel):
     type: str
     host_id: str
     user_ids: List[str]
-    gps: Optional[GpsData]
+    gps: Optional[Tuple[float, float]]
 
 @app.post("/create_meeting/")
 def api_create_meeting(meeting: MeetingData):
