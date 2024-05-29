@@ -38,7 +38,7 @@ def api_create_meeting(meeting: MeetingData):
     ))
     return {"meeting_id": meeting_id}
 
-@app.get("/get_meeting")
+@app.get("/get_meeting/")
 def api_get_meeting(id: str, url: str):
     meeting = None
     if id:
