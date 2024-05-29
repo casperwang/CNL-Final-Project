@@ -135,11 +135,15 @@ def create_meeting(meeting: Meeting) -> str:
 def get_meeting(id: str = None, url: str = None) -> Meeting:
     db = get_db()
     meetings = db['meetings']
-    if id:
-        meeting = Meeting.from_dict(meetings.find_one({"_id": id}))
-    elif url:
-        meeting = Meeting.from_dict(meetings.find_one({"url": url}))
-    return meeting
+    try:
+        if id:
+            meeting = Meeting.from_dict(meetings.find_one({"_id": id}))
+        elif url:
+            meeting = Meeting.from_dict(meetings.find_one({"url": url}))
+        return meeting
+
+    except:
+        return None
 
 def get_meetings(host_id: str):
     db = get_db()
