@@ -130,7 +130,7 @@ def create_meeting(meeting: Meeting) -> str:
     db = get_db()
     meetings = db['meetings']
     print(meeting.__dict__)
-    meetings.insert_one(meeting.__dict__)
+    #meetings.insert_one(meeting.__dict__)
     return meeting._id
 
 def get_meeting(id: str = None, url: str = None) -> Meeting:
