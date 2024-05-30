@@ -25,20 +25,21 @@ function MeetingDetails() {
       const host_id = user?.accessToken;
       try {
         // TODO injection problem?
-        const response = await fetch(`${apiPrefix}/get_meeting/?meeting_id=${meetingId}&host_id=${host_id}`);
+        const response = await fetch(`${apiPrefix}/get_meeting/?id=${meetingId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const fetchedMeeting = await response.json();
         setMeeting(fetchedMeeting);
-        if (fetchedMeeting.type === "onsite") {
+        console.log({ fetchedMeeting });
+        if (fetchedMeeting.meeting_type === "onsite") {
           const response = await fetch(`${apiPrefix}/get_onsite_qrcode/?meeting_id=${meetingId}`);
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
           const fetchedQRcodeURL = await response.json();
           setQRcodeURL(fetchedQRcodeURL);
-          console.log({ fetchedQRcodeURL });
+          // console.log({ fetchedQRcodeURL });
         }
       } catch (error) {
         console.error("Error fetching meetings:", error);
@@ -47,6 +48,10 @@ function MeetingDetails() {
 
     fetchMeeting();
   }, [user, meetingId]);
+
+  const formatDateTime = (dateTime) => {
+    return new Date(dateTime).toLocaleString();
+  };
 
   // useEffect(() => {
   //   const fetchUserStatus = async () => {
@@ -90,7 +95,7 @@ function MeetingDetails() {
         <tbody>
           <tr>
             <th>Type</th>
-            <td>{meeting.type}</td>
+            <td>{meeting.meeting_type}</td>
           </tr>
           <tr>
             <th>URL</th>
@@ -98,11 +103,11 @@ function MeetingDetails() {
           </tr>
           <tr>
             <th>Start time</th>
-            <td>{meeting.start_time}</td>
+            <td>{formatDateTime(meeting.start_time)}</td>
           </tr>
           <tr>
             <th>End time</th>
-            <td>{meeting.end_time}</td>
+            <td>{formatDateTime(meeting.end_time)}</td>
           </tr>
           {/* <tr> */}
           {/*   <th>Host ID</th> */}
@@ -114,7 +119,7 @@ function MeetingDetails() {
           </tr>
           <tr>
             <th>GPS</th>
-            <td>{meeting.gps}</td>
+            <td>{`${meeting.gps[0]} ${meeting.gps[1]}`}</td>
           </tr>
         </tbody>
       </table>

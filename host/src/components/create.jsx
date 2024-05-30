@@ -40,10 +40,10 @@ function MeetingCreate() {
         ...formData,
         host_id: user?.accessToken,
         user_ids: [],
-        gps: null,
-        // gps: { longitude, latitude },
+        // gps: null,
+        gps: [ longitude, latitude ],
       };
-      console.log({ data });
+      // console.log({ data });
 
       const response = await fetch(`${apiPrefix}/create_meeting/`, {
         method: 'POST',

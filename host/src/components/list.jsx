@@ -68,16 +68,16 @@ function MeetingList() {
         </thead>
         <tbody>
           {meetings.map((meet) => (
-            <tr key={meet.id}>
+            <tr key={meet._id}>
               <td>{meet.name}</td>
               <td>{formatDateTime(meet.start_time)}</td>
               <td>{formatDateTime(meet.end_time)}</td>
-              <td>{meet.type}</td>
+              <td>{meet.meeting_type}</td>
               <td>
-                <Link to={`/meet/${meet.id}`}>
+                <Link to={`/meet/${meet._id}`}>
                   <button className="button button-green">View</button>
                 </Link>
-                <Link to={`/meet/${meet.id}/edit`}>
+                <Link to={`/meet/${meet._id}/edit`}>
                   <button className="button button-blue">Edit</button>
                 </Link>
               </td>
