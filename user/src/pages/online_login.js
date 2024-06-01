@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "../App.css";
-import login_button from '../picture/login_button.png'
 
 const Login = () => {
   const {qrcode_id} = useParams();
@@ -19,15 +18,15 @@ const Login = () => {
       const data_geturl = await response_geturl.json(); 
       console.log(data_geturl);
 
-      navigate(`/Success`);
+      navigate('/Success');
     } catch (error) {
-      console.error(error);
+        navigate('/Fail');
     }
   };
 
   return (
     <div className="GPS-container"> 
-        <button className="GPS-button" onClick={getLocation}>Sign in</button>
+        <button className="GPS-button" onClick={login}>Sign in</button>
     </div>
   );
 };
