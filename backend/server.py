@@ -123,11 +123,11 @@ def api_get_online_qrcode(user_id: str, meeting_url: str):
 
 @app.post("/onsite_sign/")
 def api_onsite_sign(user_id: str, qrcode_id: str, gps: GpsData):
-    qrcode = get_qrcode(id=qrcode_id)
+    qrcode = get_qrcode(qrcode_id)
     if verify_gps(qrcode.meeting_id, {"longitude": gps.longitude, "latitude": gps.latitude}):
         create_sign(qrcode_id, qrcode.meeting_id, user_id)
 
 @app.post("/online_sign/")
 def api_online_sign(qrcode_id: str):
-    qrcode = get_qrcode(id=qrcode_id)
+    qrcode = get_qrcode(qrcode_id)
     create_sign(qrcode_id, qrcode.meeting_id, qrcode.user_id)
