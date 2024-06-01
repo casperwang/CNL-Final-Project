@@ -1,0 +1,171 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px; /* 根据需要调整logo的大小 */
+  height: auto; /* 保持logo的宽高比 */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('./picture/background.jpg');
+  background-size: cover; /* 背景图片覆盖整个页面 */
+  background-position: center; /* 背景图片居中显示 */
+  background-attachment: fixed; /* 背景图片固定，不随滚动条滚动 */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* 在 CSS 文件顶部 */
+@import url('https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Poetsen+One&display=swap');
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Login的部分 */
+/* .login-button {
+  background-image: url('./image.png');
+  background-size: 100%; 
+  background-color: #ACE6FB;
+  color: white;
+  border: none;
+  padding: 11px 19px;
+  border-radius: 15px; 圓角
+  font-size: 23px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.273); 添加一些陰影
+  transition: background-color 0.3s, transform 0.3s; 平滑過渡效果
+  margin-top: 20px;
+} */
+.login-button {
+  width: 200px; /* 或您希望的尺寸 */
+  height: auto; /* 保持图片的原始宽高比 */
+  /* 其他样式 */
+}
+
+
+.login-button:hover {
+  /* background-color: #0000009a; 滑鼠懸浮時的顏色變暗 */
+  transform: scale(1.08); /* 稍微放大 */
+}
+
+.login-button:active {
+  transform: scale(1.1);
+}
+
+.login-container {
+  font-family: "Lora", serif;
+  background-color: white;
+  display: flex;
+  flex-direction: column; /* 子元素垂直排列 */
+  justify-content: center; /* 子元素在容器中垂直居中 */
+  align-items: center; /* 子元素在容器中水平居中 */
+  height: 36vh; /* 容器高度佔滿整個視窗高度 */
+  margin-top: 32vh;
+  margin-bottom: 32vh;
+  margin-left: 3vh;
+  margin-right: 3vh;
+  opacity: 0.9;
+}
+
+.login-prompt {
+  color: #000000; /* 文字顏色 */
+  margin-bottom: 0px; /* 與按鈕之間的間距 */
+  text-align: center;
+  font-size: 20px; /* 文字大小 */
+  /* 您可以根據需要添加更多樣式 */
+}
+
+/* GPS */
+.GPS-container {
+  font-family: "Lora", serif;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 80vh;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  margin-left: 3vh;
+  margin-right: 3vh;
+  opacity: 0.9;
+}
+
+.GPS-button {
+  background-color: #ACE6FB;
+  color: white;
+  border: none;
+  padding: 11px 19px;
+  border-radius: 15px; 
+  font-size: 23px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.273); /*添加一些陰影*/
+  transition: background-color 0.3s, transform 0.3s; /*平滑過渡效果*/
+  margin-top: 20px;
+  font-family: "Poetsen One", sans-serif;
+}
+
+/* Success */
+.success-container {
+  background-color: azure;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  margin-top: 10vh;
+  margin-bottom: 10vh; 
+  text-align: center;
+  opacity: 0.8;
+}
+
+.success-container h1 {
+  color: #000000; 
+  margin-bottom: 0;
+  font-family: "Poetsen One", sans-serif;
+}
+
+.success-container p {
+  color: #0077ff;
+  margin-bottom: 0;
+  font-size: 23px;
+  font-family: "Poetsen One", sans-serif;
+}
