@@ -130,7 +130,11 @@ def api_get_online_qrcode(user_id: str, meeting_url: str):
 @app.post("/onsite_sign/")
 def api_onsite_sign(user_id: str, qrcode_id: str, gps: GpsData):
     qrcode = get_qrcode(qrcode_id)
+    print("user_id", user_id)
+    print("qrcode_id", qrcode_id)
+    print("gps", gps)
     if verify_gps(qrcode.meeting_id, {"longitude": gps.longitude, "latitude": gps.latitude}):
+        print("gps verified")
         if create_sign(qrcode_id, qrcode.meeting_id, user_id):
             return
     raise HTTPException(status_code=404, detail="Onsite Sign Fail")
