@@ -101,18 +101,18 @@ def create_online_qrcodes(meeting_id: str, start_time: int, end_time: int, user_
     return qrcodes
 
 class Meeting:
-    def __init__(self, _id, name, url, start_time, end_time, meeting_type, host_id, user_ids=[], gps=None, qrcodes=[], signs=[]):
+    def __init__(self, _id, name, url, start_time, end_time, meeting_type, host_id, user_ids=None, gps=None, qrcodes=None, signs=None):
         self._id = _id
         self.name = name
         self.url = url
         self.start_time = start_time
         self.end_time = end_time
         self.meeting_type = meeting_type
-        self.host_id = host_id
-        self.user_ids = user_ids
+        self.host_id = host_id # change to to_uid(host_id) finally
+        self.user_ids = user_ids if user_ids else list()
         self.gps = gps
-        self.qrcodes = qrcodes
-        self.signs = signs
+        self.qrcodes = qrcodes if qrcodes else list()
+        self.signs = signs if signs else list()
         if self.meeting_type == "onsite":
             self.qrcodes.append(create_onsite_qrcode(_id, start_time, end_time))
         """
