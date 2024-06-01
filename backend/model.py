@@ -223,24 +223,21 @@ def create_sign(qrcode_id: str, meeting_id: str, user_id: str) -> bool:
     return True
 
 def get_status(meeting_id: str):
-    db = get_db()
     meeting = get_meeting(id=meeting_id)
-
     res = []
+    if not meeting:
+        return res
     for user_id in meeting.user_ids:
         user_qrcodes = get_qrcodes(user_id)
         user_signs = get_signs(user_id)
         user_signs_id = [sign.qrcode_id for sign in user_signs]
-
         temp = []
         for qrcode in user_qrcodes:
             if qrcode._id in user_signs_id:
                 temp.append(True)
             else:
                 temp.append(False)
-
         res.append(temp)
-
     return res
     
 def verify_gps(meeting_id, gps_data) -> bool:
