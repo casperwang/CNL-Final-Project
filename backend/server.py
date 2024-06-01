@@ -92,6 +92,8 @@ def api_get_user_status(meeting_id: str):
 @app.post("/join_meeting/")
 def api_join_meeting(user_id: str, meeting_url: str):
     meeting = get_meeting(url=meeting_url)
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
     if to_uid(user_id) in meeting.user_ids:
         raise HTTPException(status_code=409, detail="User already registered")
     add_user(meeting._id, user_id)
