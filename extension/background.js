@@ -1,4 +1,3 @@
-let count = 0;
 let backend = "https://cnl.casperwang.dev/";
 chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
   if (message === "signIn") {
@@ -9,11 +8,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
   } else if(message === 'logout') {
     console.log("User logout");
     firebaseLogOut()
-      .then((result) => {
-        senderResponse(result);
-      })
+    .then((result) => {
+      senderResponse(result);
+    })
   } else if(message.type === "join"){
-    // TODO: call api to join a meeting
     console.log(message);
     apiURL = backend + "join_meeting/?user_id=" + message.token + "&meeting_url=" + message.url;
     fetch(apiURL, {
@@ -32,73 +30,50 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
     })
   } else if(message.type === "qrcode") {
     // TODO: call api to get qrcode
-    let queryOptions = { active: true, lastFocusedWindow: true };
-    chrome.tabs.query(queryOptions, (tabs) => {
-      console.log(tabs);
-      console.log(message.url);
-      if(tabs.length === 0 || (tabs[0].url !== message.url && tabs[0].url !== message.url + "/")){
-        console.log("go to correct url!");
-      }else{
-        console.log("correct");
-        let apiURL = backend + "get_online_qrcode/?user_id=" + message.token + "&meeting_url=" + message.url;
-        fetch(apiURL, {
-          method: 'GET',
-        }).then((res) => {
-          if(res.ok)
-            return res.json();
-          throw new Error('Something went wrong.');
-        }).then((res) => {
-          console.log(res);
-          if(res.status === "success"){
-            chrome.notifications.create("",
-              {
-                type: "basic",
-                title: "Scan it to take a roll call.",
-                message: "",
-                iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=" + res.content
-              },
-              function(id) {
-                console.log(id);
-                senderResponse(id);
-              }
-            );
-          }
-          // chrome.notifications.create("",
-          //   {
-          //     type: "basic",
-          //     title: "Scan it to take a roll call.",
-          //     message: "",
-          //     iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html"
-          //   },
-          //   function(id) {
-          //     console.log(id);
-          //     senderResponse(id);
-          //   }
-          // );
-          senderResponse(res);
-        }).catch((res) => {
-          console.log(res);
-          senderResponse("stop");
-        });
-        // chrome.notifications.create("",
-        //   {
-        //     type: "basic",
-        //     title: "Scan it to take a roll call.",
-        //     message: "",
-        //     iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=https://www.csie.ntu.edu.tw/~b10902064/signInWithPopup.html"
-        //   },
-        //   function(id) {
-        //     console.log(id);
-        //     senderResponse(id);
-        //   }
-        // );
-      }
-    })
-    count++;
-    if(count > 30)
-      senderResponse("stop");
-    else
-      senderResponse("success");
+    let ID = setInterval(() => {
+      let queryOptions = { active: true, lastFocusedWindow: true };
+      chrome.tabs.query(queryOptions, (tabs) => {
+        console.log(tabs);
+        console.log(message.url);
+        if(tabs.length === 0 || (tabs[0].url !== message.url && tabs[0].url !== message.url + "/")){
+          console.log("go to correct url!");
+        }else{
+          console.log("correct url");
+          let apiURL = backend + "get_online_qrcode/?user_id=" + message.token + "&meeting_url=" + message.url;
+          fetch(apiURL, {
+            method: 'GET',
+          }).then((res) => {
+            if(res.ok)
+              return res.json();
+            throw new Error('Something went wrong.');
+          }).then((res) => {
+            console.log(res);
+            if(res.status === "success"){
+              chrome.notifications.create("",
+                {
+                  type: "basic",
+                  title: "Scan it to take a roll call.",
+                  message: "",
+                  iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=" + res.content
+                },
+                function(id) {
+                  console.log(id);
+                  senderResponse(id);
+                }
+              );
+            }else if(res.status === "done"){
+              console.log("done");
+              clearInterval(ID);
+            }
+            senderResponse(res);
+          }).catch((res) => {
+            console.log(res);
+            senderResponse("error");
+            clearInterval(ID);
+          });
+        }
+      });
+    }, 20000);
   } else if(message === ""){ // use api example
     fetch('https://splitwise.casperwang.dev/get_user/?email=qingyun@gmail.com', {
       method: 'GET',

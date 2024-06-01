@@ -52,14 +52,9 @@ function logOut() {
 
 function showQRcode(token, url) {
   console.log("qrcode");
-  let ID = window.setInterval(() => {
-    chrome.runtime.sendMessage({type: "qrcode", token: token, url: url}, (response) => {
-      console.log(response);
-      if(response === "stop"){
-        window.clearInterval(ID);
-      }
-    });
-  }, 60000);
+  chrome.runtime.sendMessage({type: "qrcode", token: token, url: url}, (response) => {
+    console.log(response);
+  });
 }
 
 function joinMeeting(e) {
