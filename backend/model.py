@@ -228,7 +228,7 @@ def get_status(meeting_id: str):
     if not meeting:
         return res
     for user_id in meeting.user_ids:
-        user_qrcodes = get_qrcodes(user_id)
+        user_qrcodes = get_qrcodes(user_id) if meeting.meeting_type == "online" else meeting.qrcodes[0]
         user_signs = get_signs(user_id)
         user_signs_id = [sign.qrcode_id for sign in user_signs]
         temp = []
