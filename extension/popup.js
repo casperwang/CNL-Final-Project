@@ -59,7 +59,7 @@ function showQRcode(token, url) {
         window.clearInterval(ID);
       }
     });
-  }, 5000);
+  }, 60000);
 }
 
 function joinMeeting(e) {

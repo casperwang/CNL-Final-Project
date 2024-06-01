@@ -18,9 +18,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
     apiURL = backend + "join_meeting/?user_id=" + message.token + "&meeting_url=" + message.url;
     fetch(apiURL, {
       method: 'POST',
-      // mode: "no-cors"
     }).then((res) => {
-      if(res.ok)
+      console.log(res)
+      if(res.ok || res.status === 409)
         return res.json();
       throw new Error('Something went wrong.');
     }).then((res) => {
@@ -43,13 +43,26 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
         let apiURL = backend + "get_online_qrcode/?user_id=" + message.token + "&meeting_url=" + message.url;
         fetch(apiURL, {
           method: 'GET',
-          // mode: "no-cors"
         }).then((res) => {
           if(res.ok)
             return res.json();
           throw new Error('Something went wrong.');
         }).then((res) => {
           console.log(res);
+          if(res.status === "success"){
+            chrome.notifications.create("",
+              {
+                type: "basic",
+                title: "Scan it to take a roll call.",
+                message: "",
+                iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=" + res.content
+              },
+              function(id) {
+                console.log(id);
+                senderResponse(id);
+              }
+            );
+          }
           // chrome.notifications.create("",
           //   {
           //     type: "basic",
@@ -82,7 +95,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
       }
     })
     count++;
-    if(count > 5)
+    if(count > 30)
       senderResponse("stop");
     else
       senderResponse("success");
