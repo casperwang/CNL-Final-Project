@@ -60,10 +60,10 @@ def api_get_meeting(id: str = None, url: str = None):
         meeting = get_meeting(url=url)
     return meeting
 
-@app.get("/get_meeting_url")
+@app.get("/get_meeting_url/")
 def api_get_meeting_url(qrcode_id: str) -> str:
     meeting = get_meeting(qrcode_id=qrcode_id)
-    return {"meeting_url": meeting.url}
+    return meeting.url
 
 
 @app.get("/get_meetings/")
