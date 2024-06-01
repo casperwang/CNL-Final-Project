@@ -109,7 +109,7 @@ class Meeting:
         self.end_time = end_time
         self.meeting_type = meeting_type
         self.host_id = host_id
-        self.user_ids = []
+        self.user_ids = user_ids
         self.gps = gps
         self.qrcodes = qrcodes
         self.signs = signs
