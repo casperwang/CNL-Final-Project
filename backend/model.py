@@ -129,7 +129,7 @@ class Meeting:
             start_time=data['start_time'],
             end_time=data['end_time'],
             meeting_type=data['meeting_type'],
-            user_ids=data['user_ids']
+            user_ids=data['user_ids'],
             host_id=data['host_id'],
             gps=data['gps'],
             qrcodes=data['qrcodes'],
