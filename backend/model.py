@@ -141,7 +141,7 @@ def create_meeting(meeting: Meeting) -> str:
     meetings.insert_one(meeting.__dict__)
     return meeting._id
 
-def get_meeting(id: str = None, url: str = None) -> Meeting:
+def get_meeting(id: str = None, url: str = None, qrcode_id: str = None) -> Meeting:
     db = get_db()
     meetings = db['meetings']
     try:
@@ -149,6 +149,9 @@ def get_meeting(id: str = None, url: str = None) -> Meeting:
             meeting = Meeting.from_dict(meetings.find_one({"_id": id}))
         elif url:
             meeting = Meeting.from_dict(meetings.find_one({"url": url}))
+        elif qrcode_id:
+            meeting = Meeting.from_dict(meetings.find_one({"qrcodes":{"$in":[qrcode_id]}}))
+
         return meeting
 
     except:
