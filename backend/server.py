@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from datetime import datetime
+#from datetime import datetime
+from time import time
 
 from pydantic import BaseModel
 from typing import List, Dict, Tuple, Optional
@@ -106,7 +107,8 @@ def api_get_online_qrcode(user_id: str, meeting_url: str):
     closest_qrcode = None
     min_time_diff = float('inf')
 
-    current_time = datetime.now()
+    #current_time = datetime.now()
+    current_time = int(time())
     for qrcode in qrcodes:
         if qrcode.start_time <= current_time <= qrcode.end_time and not qrcode.used:
             time_diff = (current_time - qrcode.start_time).total_seconds()
