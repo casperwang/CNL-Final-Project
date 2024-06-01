@@ -13,10 +13,10 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/:qrcode_id" element={<Login />} />
-          <Route path="/GPS" element={<GPS />} />
-          <Route path="/Success" element={<SUCCESS />} />
-          <Route path="/Fail" element={<FAIL />} />
+          <Route path="/sign/:qrcode_id" element={<Login />} />
+          <Route path="/sign/GPS" element={<GPS />} />
+          <Route path="/sign/Success" element={<SUCCESS />} />
+          <Route path="/sign/Fail" element={<FAIL />} />
           {/* <Route path="/Online" element={<Online />} /> */}
         </Routes>
       </div>

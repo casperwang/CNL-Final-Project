@@ -63,6 +63,8 @@ def api_get_meeting(id: str = None, url: str = None):
 @app.get("/get_meeting_url/")
 def api_get_meeting_url(qrcode_id: str) -> str:
     meeting = get_meeting(qrcode_id=qrcode_id)
+    if not meeting:
+        raise HTTPException(status_code=404, detail="Meeting not found")
     return meeting.url
 
 
@@ -139,9 +141,9 @@ def api_get_online_qrcode(user_id: str, meeting_url: str):
 
 @app.post("/onsite_sign/")
 def api_onsite_sign(user_id: str, qrcode_id: str, gps: GpsData):
+    print("qrcode_id", qrcode_id)
     qrcode = get_qrcode(qrcode_id)
     print("user_id", user_id)
-    print("qrcode_id", qrcode_id)
     print("gps", gps)
     if verify_gps(qrcode.meeting_id, {"longitude": gps.longitude, "latitude": gps.latitude}):
         print("gps verified")
