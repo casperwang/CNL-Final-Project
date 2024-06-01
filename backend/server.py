@@ -31,8 +31,8 @@ class GpsData(BaseModel):
 class MeetingData(BaseModel):
     name: str
     url: str
-    start_time: str
-    end_time: str
+    start_time: int
+    end_time: int
     type: str
     host_id: str
     gps: Tuple[float, float]
