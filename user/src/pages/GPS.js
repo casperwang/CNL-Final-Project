@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import "../App.css";
-import { useNavigate }  from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../config/firebase";
 import { onAuthStateChanged, getIdToken } from "firebase/auth";
 import MapContainer from '../config/MapContainer';
 
 const GPSPage = () => {
+
+    const Location = useLocation();
+    const queryParams = new URLSearchParams(Location.search);
+    const qrcode_id = queryParams.get('qrcode_id');
+
     const navigate = useNavigate();
     const [userToken, setUserToken] = useState(null);
     
@@ -66,13 +71,45 @@ const GPSPage = () => {
         }
     };
 
-    const SignIn = () => {
+
+    const SignIn = async() => {
         if (!userToken) {
             alert("You haven't signed in, please sign in first!");
             return;
         }
 
-        navigate('/Success');
+        const endpoint = `https://cnl.casperwang.dev/onsite_sign/?user_id=${userToken}&qrcode_id=${qrcode_id}`;
+
+        const payload = {
+            "longitude": location.longitude,
+            "latitude": location.latitude
+        };
+
+        alert(JSON.stringify(payload))
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'accept': 'application/json',
+                },
+                body: JSON.stringify(payload), 
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json(); 
+            console.log(data); 
+
+            navigate('/Success');
+            
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+            navigate('/Fail');
+        }
     };
 
     return (
