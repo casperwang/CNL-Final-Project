@@ -24,7 +24,7 @@ const GPSPage = () => {
                 });
             } else {
                 alert("You haven't sign in, please sign in first!")
-                navigate("/");
+                navigate(`/sign/${qrcode_id}`);
             }
         });
 
@@ -104,11 +104,11 @@ const GPSPage = () => {
             const data = await response.json(); 
             console.log(data); 
 
-            navigate('/Success');
+            navigate('/sign/Success');
             
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
-            navigate('/Fail');
+            navigate('/sign/Fail');
         }
     };
 
