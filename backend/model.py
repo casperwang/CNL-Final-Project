@@ -7,8 +7,13 @@ from bson.binary import Binary, UUID_SUBTYPE
 import uuid
 
 import time
+import firebase_admin
+from firebase_admin import credentials, auth
 
 from utils import *
+
+cred = credentials.Certificate("./cnl-final-chrome-extensions-firebase-adminsdk-x7shf-98e44d5ee6.json")
+firebase_admin.initialize_app(cred)
 
 def get_client():
     uri = "mongodb://localhost:27017"
@@ -21,6 +26,11 @@ def get_db(client=None):
 
 def get_prefix() -> str:
     return "CNL.casperwang.dev"
+
+def to_uid(user_id):
+    decoded_token = auth.verify_id_token(user_id)
+    uid = decoded_token['uid']
+    return uid
 
 class QRCode:
     def __init__(self, _id, meeting_id, start_time, end_time, user_id=None, used=False):
@@ -91,18 +101,18 @@ def create_online_qrcodes(meeting_id: str, start_time: int, end_time: int, user_
     return qrcodes
 
 class Meeting:
-    def __init__(self, _id, name, url, start_time, end_time, meeting_type, host_id, user_ids=list(), gps=None, qrcodes=[], signs=[]):
+    def __init__(self, _id, name, url, start_time, end_time, meeting_type, host_id, user_ids=None, gps=None, qrcodes=None, signs=None):
         self._id = _id
         self.name = name
         self.url = url
         self.start_time = start_time
         self.end_time = end_time
         self.meeting_type = meeting_type
-        self.host_id = host_id
-        self.user_ids = user_ids
+        self.host_id = host_id # change to to_uid(host_id) finally
+        self.user_ids = user_ids if user_ids else list()
         self.gps = gps
-        self.qrcodes = qrcodes
-        self.signs = signs
+        self.qrcodes = qrcodes if qrcodes else list()
+        self.signs = signs if signs else list()
         if self.meeting_type == "onsite":
             self.qrcodes.append(create_onsite_qrcode(_id, start_time, end_time))
         """
@@ -119,8 +129,8 @@ class Meeting:
             start_time=data['start_time'],
             end_time=data['end_time'],
             meeting_type=data['meeting_type'],
-            host_id=data['host_id'],
             user_ids=data['user_ids'],
+            host_id=data['host_id'],
             gps=data['gps'],
             qrcodes=data['qrcodes'],
             signs=data['signs']
@@ -132,14 +142,21 @@ def create_meeting(meeting: Meeting) -> str:
     meetings.insert_one(meeting.__dict__)
     return meeting._id
 
-def get_meeting(id: str = None, url: str = None) -> Meeting:
+def get_meeting(id: str = None, url: str = None, qrcode_id: str = None) -> Meeting:
     db = get_db()
     meetings = db['meetings']
-    if id:
-        meeting = Meeting.from_dict(meetings.find_one({"_id": id}))
-    elif url:
-        meeting = Meeting.from_dict(meetings.find_one({"url": url}))
-    return meeting
+    try:
+        if id:
+            meeting = Meeting.from_dict(meetings.find_one({"_id": id}))
+        elif url:
+            meeting = Meeting.from_dict(meetings.find_one({"url": url}))
+        elif qrcode_id:
+            meeting = Meeting.from_dict(meetings.find_one({"qrcodes":{"$in":[qrcode_id]}}))
+
+        return meeting
+
+    except:
+        return None
 
 def get_meetings(host_id: str):
     db = get_db()
@@ -150,10 +167,11 @@ def get_meetings(host_id: str):
 # didn't test
 def add_user(meeting_id: str, user_id: str):
     meeting = get_meeting(id=meeting_id)
-    if user_id not in meeting.user_ids:
-        meeting.user_ids.append(user_id)
+    uid = to_uid(user_id)
+    if uid not in meeting.user_ids:
+        meeting.user_ids.append(uid)
         if meeting.meeting_type == "online":
-            new_qrcodes = create_online_qrcodes(meeting._id, meeting.start_time, meeting.end_time, user_id)
+            new_qrcodes = create_online_qrcodes(meeting._id, meeting.start_time, meeting.end_time, uid)
             meeting.qrcodes.extend(new_qrcodes)
         db = get_db()
         meetings = db['meetings']
@@ -187,7 +205,7 @@ def create_sign(qrcode_id: str, meeting_id: str, user_id: str) -> bool:
     signs = db['signs']
     qrcodes = db['qrcodes']
 
-    checker = signs.find_one({"qrcode_id": qrcode_id, "meeting_id": meeting_id, "user_id": user_id})
+    checker = signs.find_one({"qrcode_id": qrcode_id, "meeting_id": meeting_id, "user_id": to_uid(user_id)})
     if checker != None:
         return False
 
@@ -196,7 +214,7 @@ def create_sign(qrcode_id: str, meeting_id: str, user_id: str) -> bool:
     if cur_time < target_qrcode.start_time or target_qrcode.end_time < cur_time:
         return False
 
-    sign = Sign(qrcode_id, meeting_id, user_id)
+    sign = Sign(qrcode_id, meeting_id, to_uid(user_id))
     signs.insert_one(sign.__dict__)
     qrcodes.update_one(
             {"_id": qrcode_id},
@@ -205,26 +223,23 @@ def create_sign(qrcode_id: str, meeting_id: str, user_id: str) -> bool:
     return True
 
 def get_status(meeting_id: str):
-    db = get_db()
     meeting = get_meeting(id=meeting_id)
-
     res = []
+    if not meeting:
+        return res
     for user_id in meeting.user_ids:
-        user_qrcodes = get_qrcodes(user_id)
+        user_qrcodes = get_qrcodes(user_id) if meeting.meeting_type == "online" else [get_qrcode(meeting.qrcodes[0])]
         user_signs = get_signs(user_id)
         user_signs_id = [sign.qrcode_id for sign in user_signs]
-
         temp = []
         for qrcode in user_qrcodes:
             if qrcode._id in user_signs_id:
                 temp.append(True)
             else:
                 temp.append(False)
-
         res.append(temp)
-
     return res
     
-def vefiry_gps(meeting_id, gps_data) -> bool:
+def verify_gps(meeting_id, gps_data) -> bool:
     meeting = get_meeting(id=meeting_id)
     return cal_dis_gps(meeting.gps, gps_data) <= 50
