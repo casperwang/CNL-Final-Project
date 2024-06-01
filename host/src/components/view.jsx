@@ -50,15 +50,22 @@ function MeetingDetails() {
   }, [user, meetingId]);
 
   const formatDateTime = (dateTime) => {
-    return new Date(dateTime).toLocaleString();
+    return new Date(dateTime * 1000).toLocaleString();
   };
 
-  // useEffect(() => {
-  //   const fetchUserStatus = async () => {
-  //     setUserStatus(userStatuses[meetingId - 1]);
-  //   };
-  //   fetchUserStatus();
-  // }, [meetingId, meeting]);
+  useEffect(() => {
+    const fetchUserStatus = async () => {
+      try {
+        // TODO injection problem?
+        const response = await fetch(`${apiPrefix}/get_user_status/?meeting_id=${meetingId}`);
+        console.log(await response.json());
+      } catch (error) {
+        console.error("Error fetching meetings:", error);
+      }
+      // setUserStatus(userStatuses[meetingId - 1]);
+    };
+    fetchUserStatus();
+  }, [meetingId, meeting]);
 
   if (!meeting) { // loading
     return (
@@ -119,7 +126,7 @@ function MeetingDetails() {
           </tr>
           <tr>
             <th>GPS</th>
-            <td>{`${meeting.gps[0]} ${meeting.gps[1]}`}</td>
+            <td>{`${meeting.gps.longitude} ${meeting.gps.latitude}`}</td>
           </tr>
         </tbody>
       </table>

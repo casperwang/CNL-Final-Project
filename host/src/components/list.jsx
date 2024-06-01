@@ -32,7 +32,7 @@ function MeetingList() {
   }, [user]);
 
   const formatDateTime = (dateTime) => {
-    return new Date(dateTime).toLocaleString();
+    return new Date(dateTime * 1000).toLocaleString();
   };
 
   if (!meetings) { // loading

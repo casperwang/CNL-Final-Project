@@ -33,11 +33,17 @@ function MeetingCreate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const unixTimeStamp = (t) => {
+      return Math.floor(new Date(t).getTime() / 1000);
+    };
+
     try {
       // TODO gps
       const [longitude, latitude] = formData.gps.split(' ');
       const data = {
         ...formData,
+        start_time: unixTimeStamp(formData.start_time),
+        end_time: unixTimeStamp(formData.end_time),
         host_id: user?.accessToken,
         user_ids: [],
         // gps: null,
