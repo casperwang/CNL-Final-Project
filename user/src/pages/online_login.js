@@ -26,19 +26,8 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container"> 
-      {/* <img src="/logo_tran.png" alt="Logo" className="logo" /> */}
-      <p className="login-prompt">Welcome to the meeting!</p>
-      <p className="login-prompt"> Please sign in with your Google account! </p>
-      <p></p>
-      <img 
-      src={login_button}
-      alt="Sign in with Google"
-      className="login-button"
-      onClick={login}
-      style={{cursor: 'pointer'}} // 将鼠标悬停时的光标样式设置为指针
-      />
-      {/* <button className="login-button" onClick={login}>Sign in with Google</button> */}
+    <div className="GPS-container"> 
+        <button className="GPS-button" onClick={getLocation}>Sign in</button>
     </div>
   );
 };
