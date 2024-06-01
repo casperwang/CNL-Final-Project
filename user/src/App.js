@@ -5,6 +5,7 @@ import Login from "./pages/login";
 import GPS from "./pages/GPS";
 import SUCCESS from "./pages/Success";
 import FAIL from "./pages/Fail";
+// import Online from "./pages/online_login"
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <Route path="/GPS" element={<GPS />} />
           <Route path="/Success" element={<SUCCESS />} />
           <Route path="/Fail" element={<FAIL />} />
-          <Route path="/Online" element={<Online_Login />} />
+          {/* <Route path="/Online" element={<Online />} /> */}
         </Routes>
       </div>
     </Router>
