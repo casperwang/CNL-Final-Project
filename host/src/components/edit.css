@@ -1,0 +1,26 @@
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+form button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  /* border: none; */
+  /* border-radius: 3px; */
+}
