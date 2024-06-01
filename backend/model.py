@@ -70,7 +70,7 @@ def get_qrcode(qrcode_id: str) -> QRCode:
 def get_qrcodes(user_id: str) -> List[QRCode]:
     db = get_db()
     qrcodes = db['qrcodes']
-    user_qrcodes = qrcodes.find({"user_id": to_uid(user_id)})
+    user_qrcodes = qrcodes.find({"user_id": user_id})
     if not user_qrcodes:
         raise ValueError("QRCode not found")
     return [QRCode.from_dict(qrcode) for qrcode in user_qrcodes]

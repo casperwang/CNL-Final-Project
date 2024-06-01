@@ -105,7 +105,7 @@ def api_get_online_qrcode(user_id: str, meeting_url: str):
     if to_uid(user_id) not in meeting.user_ids:
         raise HTTPException(status_code=404, detail="User not found in the meeting")
 
-    qrcodes = get_qrcodes(user_id)
+    qrcodes = get_qrcodes(to_uid(user_id))
     closest_qrcode = None
     min_time_diff = float('inf')
 
