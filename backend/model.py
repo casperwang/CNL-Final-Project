@@ -101,7 +101,7 @@ def create_online_qrcodes(meeting_id: str, start_time: int, end_time: int, user_
     return qrcodes
 
 class Meeting:
-    def __init__(self, _id, name, url, start_time, end_time, meeting_type, host_id, user_ids=list(), gps=None, qrcodes=[], signs=[]):
+    def __init__(self, _id, name, url, start_time, end_time, meeting_type, host_id, gps=None, qrcodes=[], signs=[]):
         self._id = _id
         self.name = name
         self.url = url
@@ -109,7 +109,7 @@ class Meeting:
         self.end_time = end_time
         self.meeting_type = meeting_type
         self.host_id = host_id
-        self.user_ids = user_ids
+        self.user_ids = []
         self.gps = gps
         self.qrcodes = qrcodes
         self.signs = signs

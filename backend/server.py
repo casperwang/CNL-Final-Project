@@ -34,8 +34,7 @@ class MeetingData(BaseModel):
     end_time: str
     type: str
     host_id: str
-    user_ids: List[str]
-    gps: Optional[Tuple[float, float]]
+    gps: Tuple[float, float]
 
 @app.post("/create_meeting/")
 def api_create_meeting(meeting: MeetingData):
@@ -47,7 +46,6 @@ def api_create_meeting(meeting: MeetingData):
         end_time=meeting.end_time,
         meeting_type=meeting.type,
         host_id=meeting.host_id,
-        user_ids=meeting.user_ids,
         gps={"longitude": meeting.gps[0], "latitude": meeting.gps[1]}
     ))
     return {"meeting_id": meeting_id}
