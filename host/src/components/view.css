@@ -1,0 +1,24 @@
+.meeting-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.meeting-container th, .meeting-container td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.meeting-container th {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.meeting-container tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.meeting-container tr:hover {
+  background-color: #f1f1f1;
+}
