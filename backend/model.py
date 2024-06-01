@@ -197,7 +197,7 @@ class Sign:
 def get_signs(user_id: str):
     db = get_db()
     signs = db['signs']
-    user_signs = signs.find({"user_id": to_uid(user_id)})
+    user_signs = signs.find({"user_id": user_id})
     return [Sign.from_dict(sign) for sign in user_signs]
 
 def create_sign(qrcode_id: str, meeting_id: str, user_id: str) -> bool:
