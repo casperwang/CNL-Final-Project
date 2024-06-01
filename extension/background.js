@@ -20,16 +20,17 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
       console.log(res)
       if(res.ok || res.status === 409)
         return res.json();
-      throw new Error('Something went wrong.');
+      throw new Error(res);
     }).then((res) => {
       console.log(res);
       senderResponse(res);
     }).catch((res) => {
       console.log(res);
-      senderResponse(res);
+      if(res.status === 404)
+        showInfo("The meeting is not created.", "", "info.png");
+      senderResponse("error");
     })
   } else if(message.type === "qrcode") {
-    // TODO: call api to get qrcode
     let ID = setInterval(() => {
       let queryOptions = { active: true, lastFocusedWindow: true };
       chrome.tabs.query(queryOptions, (tabs) => {
@@ -45,47 +46,44 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
           }).then((res) => {
             if(res.ok)
               return res.json();
-            throw new Error('Something went wrong.');
+            throw new Error(res);
           }).then((res) => {
             console.log(res);
             if(res.status === "success"){
-              chrome.notifications.create("",
-                {
-                  type: "basic",
-                  title: "Scan it to take a roll call.",
-                  message: "",
-                  iconUrl: "https://api.qrserver.com/v1/create-qr-code/?data=" + res.content
-                },
-                function(id) {
-                  console.log(id);
-                  senderResponse(id);
-                }
-              );
+              showInfo("Scan it to take a roll call.", "", "https://api.qrserver.com/v1/create-qr-code/?data=" + res.content);
             }else if(res.status === "done"){
               console.log("done");
+              showInfo("The meeting is finished.", "", "info.png");
+              senderResponse("stop");
               clearInterval(ID);
             }
-            senderResponse(res);
           }).catch((res) => {
             console.log(res);
+            if(res.status === 404)
+              showInfo("You are not in the meeting.", "Please join it first.", "info.png");
             senderResponse("error");
             clearInterval(ID);
           });
         }
       });
     }, 20000);
-  } else if(message === ""){ // use api example
-    fetch('https://splitwise.casperwang.dev/get_user/?email=qingyun@gmail.com', {
-      method: 'GET',
-    }).then((res) => {
-      return res.json();
-    }).then((res) => {
-      console.log(res);
-      senderResponse(res);
-    })
   }
   return true;
 })
+
+function showInfo(title, message, icon) {
+  chrome.notifications.create("",
+    {
+      type: "basic",
+      title: title,
+      message: message,
+      iconUrl: icon
+    },
+    function(id) {
+      console.log("notifications", id);
+    }
+  );
+}
 
 const OFFSCREEN_DOCUMENT_PATH = '/offscreen.html';
 

@@ -18,6 +18,7 @@ function onLoad() {
   if(meeting !== null){
     document.getElementById("input").style.visibility = "hidden";
     document.getElementById("meetingInfo").style.visibility = "visible";
+    document.getElementById("meetingURL").style.visibility = "visible";
     document.getElementById("meetingURL").innerText = meeting;
   }
 }
@@ -44,6 +45,7 @@ function logOut() {
     document.getElementById("signIn").style.display = "block";
     document.getElementById("logOut").style.display = "none";
     document.getElementById("meetingInfo").style.visibility = "hidden";
+    document.getElementById("meetingURL").style.visibility = "hidden";
     localStorage.removeItem("NAME");
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("MEETING");
@@ -54,6 +56,13 @@ function showQRcode(token, url) {
   console.log("qrcode");
   chrome.runtime.sendMessage({type: "qrcode", token: token, url: url}, (response) => {
     console.log(response);
+    if(response === "stop" || response === "error"){
+      document.getElementById("input").style.visibility = "visible";
+      document.getElementById("input").value = "";
+      document.getElementById("meetingInfo").style.visibility = "hidden";
+      document.getElementById("meetingURL").style.visibility = "hidden";
+      localStorage.removeItem("MEETING");
+    }
   });
 }
 
@@ -65,11 +74,17 @@ function joinMeeting(e) {
     let token = localStorage.getItem("TOKEN");
     chrome.runtime.sendMessage({type: "join", token: token, url: url}, (response) => {
       console.log(response);
-      document.getElementById("input").style.visibility = "hidden";
-      document.getElementById("meetingInfo").style.visibility = "visible";
-      document.getElementById("meetingURL").innerText = url;
-      localStorage.setItem("MEETING", url);
-      showQRcode(token, url);
+      if(response === "error"){
+        document.getElementById("input").value = "";
+      }else{
+        document.getElementById("input").style.visibility = "hidden";
+        document.getElementById("meetingInfo").style.visibility = "visible";
+        document.getElementById("meetingURL").style.visibility = "visible";
+        document.getElementById("meetingURL").innerText = url;
+        localStorage.setItem("MEETING", url);
+        showQRcode(token, url);
+      }
+      
     })
   }
 }
