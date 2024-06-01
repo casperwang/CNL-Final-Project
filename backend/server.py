@@ -114,7 +114,7 @@ def api_get_online_qrcode(user_id: str, meeting_url: str):
     remain_qrcodes = 0
     for qrcode in qrcodes:
         if current_time <= qrcode.end_time:
-            remain_qrcdoes += 1
+            remain_qrcodes += 1
         if qrcode.start_time <= current_time <= qrcode.end_time and not qrcode.used:
             time_diff = current_time - qrcode.start_time
             if time_diff < min_time_diff:
