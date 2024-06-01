@@ -5,7 +5,7 @@ import Login from "./pages/login";
 import GPS from "./pages/GPS";
 import SUCCESS from "./pages/Success";
 import FAIL from "./pages/Fail";
-// import Online from "./pages/online_login"
+import Online from "./pages/online_login"
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
           <Route path="/sign/GPS" element={<GPS />} />
           <Route path="/sign/Success" element={<SUCCESS />} />
           <Route path="/sign/Fail" element={<FAIL />} />
-          {/* <Route path="/Online" element={<Online />} /> */}
+          <Route path="/Online/:qrcode_id" element={<Online />} />
         </Routes>
       </div>
     </Router>
