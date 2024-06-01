@@ -38,7 +38,7 @@ const Login = () => {
       const data = await response_join.json(); 
       console.log(data);
 
-      navigate(`/GPS?qrcode_id=${qrcode_id}`);
+      navigate(`/sign/GPS?qrcode_id=${qrcode_id}`);
     } catch (error) {
       console.error(error);
       if (error.code === 'auth/popup-closed-by-user') {

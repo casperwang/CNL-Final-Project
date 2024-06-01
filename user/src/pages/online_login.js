@@ -18,9 +18,9 @@ const Login = () => {
       const data_geturl = await response_geturl.json(); 
       console.log(data_geturl);
 
-      navigate('/Success');
+      navigate('/sign/Success');
     } catch (error) {
-        navigate('/Fail');
+        navigate('/sign/Fail');
     }
   };
 
