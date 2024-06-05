@@ -3,8 +3,8 @@ import {GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import "../App.css";
 
 const containerStyle = {
-  width: '400px',
-  height: '400px'
+  width: '350px',
+  height: '350px'
 };
 
 function MapContainer({ lat, lng }) { // 接收lat和lng作为props

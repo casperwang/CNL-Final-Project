@@ -14,7 +14,9 @@ const FailPage = () => {
         {/* <img src="/logo_tran.png" alt="Logo" className="logo" /> */}
         <img src={failImage} alt="Fail:(" style={{ width: '30%', height: 'auto' }}/>
         <h1>Oops! Something went wrong.</h1>
-        <p><Link to = {homepage} >Let's try that again.</Link></p>
+        {mode === 'onsign' && (
+          <p><Link to = {homepage} >Let's try that again.</Link></p>
+        )}
     </div>
   );
 };
