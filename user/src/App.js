@@ -13,11 +13,11 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/sign/:qrcode_id" element={<Login />} />
           <Route path="/sign/GPS" element={<GPS />} />
           <Route path="/sign/Success" element={<SUCCESS />} />
           <Route path="/sign/Fail" element={<FAIL />} />
-          <Route path="/Online/:qrcode_id" element={<Online />} />
+          <Route path="/sign/online/:qrcode_id" element={<Online />} />
+          <Route path="/sign/:qrcode_id" element={<Login />} />
         </Routes>
       </div>
     </Router>

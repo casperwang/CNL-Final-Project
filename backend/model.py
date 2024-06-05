@@ -25,7 +25,7 @@ def get_db(client=None):
     return client["CNL"]
 
 def get_prefix() -> str:
-    return "CNL.casperwang.dev"
+    return "https://CNL.casperwang.dev/sign"
 
 def to_uid(user_id):
     decoded_token = auth.verify_id_token(user_id)
@@ -39,8 +39,12 @@ class QRCode:
         self.start_time = start_time
         self.end_time = end_time
         self.user_id = user_id
-        self.used = False
-        self.url = get_prefix() + "/" + _id
+        self.used = used
+        meeting = get_meeting(id=meeting_id)
+        if meeting and meeting.meeting_type == "online":
+            self.url = get_prefix() + "/online/" + _id
+        else:
+            self.url = get_prefix() + "/" + _id
     
     @classmethod
     def from_dict(cls, data):
@@ -200,21 +204,30 @@ def get_signs(user_id: str):
     user_signs = signs.find({"user_id": user_id})
     return [Sign.from_dict(sign) for sign in user_signs]
 
-def create_sign(qrcode_id: str, meeting_id: str, user_id: str) -> bool:
+def create_sign(qrcode_id: str, meeting_id: str, user_id: str, meeting_type: str) -> bool:
     db = get_db()
     signs = db['signs']
     qrcodes = db['qrcodes']
-
-    checker = signs.find_one({"qrcode_id": qrcode_id, "meeting_id": meeting_id, "user_id": to_uid(user_id)})
+    
+    print(meeting_type, user_id)
+    if meeting_type == "onsite":
+        checker = signs.find_one({"qrcode_id": qrcode_id, "meeting_id": meeting_id, "user_id": to_uid(user_id)})
+    else:
+        checker = signs.find_one({"qrcode_id": qrcode_id, "meeting_id": meeting_id, "user_id": user_id})
     if checker != None:
+        print("checker fail")
         return False
 
     target_qrcode = get_qrcode(qrcode_id)
     cur_time = (time.time())
     if cur_time < target_qrcode.start_time or target_qrcode.end_time < cur_time:
+        print("time fail", cur_time, target_qrcode.start_time, target_qrcode.end_time)
         return False
 
-    sign = Sign(qrcode_id, meeting_id, to_uid(user_id))
+    if meeting_type == "onsite":
+        sign = Sign(qrcode_id, meeting_id, to_uid(user_id))
+    else:
+        sign = Sign(qrcode_id, meeting_id, user_id)
     signs.insert_one(sign.__dict__)
     qrcodes.update_one(
             {"_id": qrcode_id},
@@ -242,4 +255,4 @@ def get_status(meeting_id: str):
     
 def verify_gps(meeting_id, gps_data) -> bool:
     meeting = get_meeting(id=meeting_id)
-    return cal_dis_gps(meeting.gps, gps_data) <= 50
+    return cal_dis_gps(meeting.gps, gps_data) <= 5000

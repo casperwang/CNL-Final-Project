@@ -7,7 +7,11 @@ def random_time_points(start_time, end_time, num_points):
     delta = end_time - start_time
     random_seconds = sorted(random.randint(0, delta // 60 - 1) * 60 for _ in range(num_points))
     time_points = [start_time + sec for sec in random_seconds]
-    return time_points
+    t = []
+    for i in range(0, 5):
+        if i == 0 or time_points[i] != time_points[i-1]:
+            t.append(time_points[i])
+    return t
 
 # calculate gps distance
 def rad2deg(radians):

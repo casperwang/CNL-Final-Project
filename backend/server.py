@@ -118,6 +118,7 @@ def api_get_online_qrcode(user_id: str, meeting_url: str):
         if current_time <= qrcode.end_time:
             remain_qrcodes += 1
         if qrcode.start_time <= current_time <= qrcode.end_time and not qrcode.used:
+            print(qrcode._id, qrcode.used)
             time_diff = current_time - qrcode.start_time
             if time_diff < min_time_diff:
                 min_time_diff = time_diff
@@ -147,14 +148,14 @@ def api_onsite_sign(user_id: str, qrcode_id: str, gps: GpsData):
     print("gps", gps)
     if verify_gps(qrcode.meeting_id, {"longitude": gps.longitude, "latitude": gps.latitude}):
         print("gps verified")
-        if create_sign(qrcode_id, qrcode.meeting_id, user_id):
+        if create_sign(qrcode_id, qrcode.meeting_id, user_id, "onsite"):
             return
     raise HTTPException(status_code=404, detail="Onsite Sign Fail")
 
 @app.post("/online_sign/")
 def api_online_sign(qrcode_id: str):
     qrcode = get_qrcode(qrcode_id)
-    if create_sign(qrcode_id, qrcode.meeting_id, qrcode.user_id):
+    if create_sign(qrcode_id, qrcode.meeting_id, qrcode.user_id, "online"):
         return
     raise HTTPException(status_code=404, detail="Online Sign Fail")
 
