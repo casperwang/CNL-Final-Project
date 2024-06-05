@@ -20,13 +20,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, senderResponse){
       console.log(res)
       if(res.ok || res.status === 409)
         return res.json();
-      throw new Error(res);
+      throw new Error(res.status);
     }).then((res) => {
       console.log(res);
       senderResponse(res);
     }).catch((res) => {
       console.log(res);
-      if(res.status === 404)
+      if(res === 404)
         showInfo("The meeting is not created.", "", "info.png");
       senderResponse("error");
     })
