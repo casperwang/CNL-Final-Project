@@ -17,7 +17,8 @@ function MeetingDetails() {
   const [user, loading, error] = useAuthState(auth);
   const [meeting, setMeeting] = useState(null);
   const [QRcodeURL, setQRcodeURL] = useState(null);
-  // const [userStatus, setUserStatus] = useState(null);
+
+  const [userStatus, setUserStatus] = useState(null);
 
   useEffect(() => {
     const fetchMeeting = async () => {
@@ -58,11 +59,12 @@ function MeetingDetails() {
       try {
         // TODO injection problem?
         const response = await fetch(`${apiPrefix}/get_user_status/?meeting_id=${meetingId}`);
-        console.log(await response.json());
+        const userData = await response.json();
+        console.log({ userData });
+        setUserStatus(userData);
       } catch (error) {
         console.error("Error fetching meetings:", error);
       }
-      // setUserStatus(userStatuses[meetingId - 1]);
     };
     fetchUserStatus();
   }, [meetingId, meeting]);
@@ -120,10 +122,10 @@ function MeetingDetails() {
           {/*   <th>Host ID</th> */}
           {/*   <td>{meeting.host_id}</td> */}
           {/* </tr> */}
-          <tr>
-            <th>User IDs</th>
-            <td>{meeting.user_ids.join(', ')}</td>
-          </tr>
+          {/* <tr> */}
+          {/*   <th>User IDs</th> */}
+          {/*   <td>{meeting.user_ids.join(', ')}</td> */}
+          {/* </tr> */}
           <tr>
             <th>GPS</th>
             <td>{`${meeting.gps.longitude} ${meeting.gps.latitude}`}</td>
@@ -131,7 +133,9 @@ function MeetingDetails() {
         </tbody>
       </table>
 
-      {/* <UserStatus userStatus={userStatus} /> */}
+      {
+        userStatus ?  <UserStatus userStatus={userStatus} /> : 'noooo'
+      }
     </div>
   );
 }
