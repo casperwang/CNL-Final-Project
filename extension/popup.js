@@ -1,6 +1,5 @@
 document.getElementById("signIn").addEventListener("click", signIn);
 document.getElementById("logOut").addEventListener("click", logOut);
-document.getElementById("qrcode").addEventListener("click", showQRcode);
 document.getElementById("input").addEventListener("keypress", joinMeeting);
 window.onload = onLoad;
 // localStorage has items NAME, TOKEN, MEETING
