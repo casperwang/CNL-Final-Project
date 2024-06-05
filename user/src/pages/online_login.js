@@ -18,9 +18,9 @@ const Login = () => {
       const data_geturl = await response_geturl.json(); 
       console.log(data_geturl);
 
-      navigate(`/sign/Success?qrcode_id=${qrcode_id}`);
+      navigate(`/sign/Success?qrcode_id=${qrcode_id}&mode=online`);
     } catch (error) {
-        navigate(`/sign/Fail?qrcode_id=${qrcode_id}`);
+        navigate(`/sign/Success?qrcode_id=${qrcode_id}&mode=online`);
     }
   };
 

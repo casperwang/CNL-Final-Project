@@ -104,11 +104,11 @@ const GPSPage = () => {
             const data = await response.json(); 
             console.log(data); 
 
-            navigate(`/sign/Success?qrcode_id=${qrcode_id}`);
+            navigate(`/sign/Success?qrcode_id=${qrcode_id}&mode=onsign`);
             
         } catch (error) {
             console.error('There was a problem with the fetch operation:', error);
-            navigate(`/sign/Fail?qrcode_id=${qrcode_id}`);
+            navigate(`/sign/Fail?qrcode_id=${qrcode_id}&mode=onsign`);
         }
     };
 

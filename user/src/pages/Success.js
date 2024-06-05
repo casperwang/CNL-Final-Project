@@ -9,6 +9,7 @@ const SuccessPage = () => {
   const queryParams = new URLSearchParams(location.search);
   const qrcode_id = queryParams.get('qrcode_id');
   const homepage = `/sign/${qrcode_id}`;
+  const mode = queryParams.get('mode');
 
   return (
     <div className="success-container">
@@ -16,7 +17,9 @@ const SuccessPage = () => {
         <img src={successImage} alt="Success" style={{ width: '30%', height: 'auto' }}/>
         <h1>Hello {auth?.currentUser?.displayName || "User"}!</h1>
         <p>You have checked in!</p>
-        <p><Link to={homepage}>Go back to the homepage</Link></p>
+        {mode === 'onsign' && (
+            <p><Link to={homepage}>Go back to the homepage</Link></p>
+        )}
     </div>
   );
 };
