@@ -3,9 +3,39 @@
   <head>
     <title>signInWithPopup</title>
   </head>
+  <style>
+    div {
+      width: 200px;
+      margin: 10px;
+    }
+    button {
+      background-color: #3F96E7;
+      color: white;
+      border-radius: 10px;
+      border-style: none;
+      font-weight: 700;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      cursor: pointer;
+    }
+    input {
+      background-color: lightgray;
+      border-radius: 10px;
+      border-style: none;
+      padding: 10px;
+    }
+  </style>
   <body>
-    <h1>signInWithPopup</h1>
-    <button id="signIn">Login with Google</button>
+    <div>
+      <h1 id="name">CNL final</h1>
+      <button id="signIn">Login with Google</button>
+      <button id="logOut" style="display: none;">Logout</button>
+      <button id="qrcode">QR code</button>
+      <input id="input" placeholder="Please enter meeting URL" style="visibility: hidden;" />
+      <p id="meetingInfo" style="visibility: hidden; margin-bottom: 0;">You are in </p><b id="meetingURL" style="visibility: hidden; overflow-wrap: anywhere;"></b>
+    </div>
     <script src="./popup.js"></script>
   </body>
 </html>
